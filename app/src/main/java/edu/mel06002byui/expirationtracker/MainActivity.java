@@ -7,9 +7,7 @@ import android.view.MenuItem;
 
 
 public class MainActivity extends ActionBarActivity {
-    //I thrive on conflict
-    // this is another change
-    //Why Must the Fighting Continue?
+    //I added this comment for Jon
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
