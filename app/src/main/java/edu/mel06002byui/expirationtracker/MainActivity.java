@@ -17,7 +17,7 @@ public class MainActivity extends ActionBarActivity {
     private List<Grocery> currentExpireList;
 
     /**
-     * 
+     *
      * @param savedInstanceState
      */
     @Override
