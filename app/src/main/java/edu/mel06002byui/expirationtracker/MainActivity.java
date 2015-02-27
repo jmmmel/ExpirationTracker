@@ -4,12 +4,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
     //I added this comment for Jon
+    private List<Grocery> currentExpireList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        currentExpireList = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
@@ -36,4 +44,17 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void addNewItem(View view){
+
+    }
+
+    private void addExistingItem(View view){
+
+    }
+
+    private void sortItems(){
+        Collections.sort(currentExpireList);
+    }
+
 }

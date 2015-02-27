@@ -5,7 +5,7 @@ import java.util.Calendar;
 /**
  * Created by James on 2/17/2015.
  */
-class Grocery {
+class Grocery implements Comparable<Grocery>{
 
     Calendar purchaseDate;
     Calendar expireDate;
@@ -78,6 +78,11 @@ class Grocery {
      */
     public void addValue(int addNumber) {
         quantity = quantity + addNumber;
+    }
+
+    @Override
+    public int compareTo(Grocery another) {
+        return this.getExpireDate().compareTo(another.getExpireDate());
     }
 
     /**
