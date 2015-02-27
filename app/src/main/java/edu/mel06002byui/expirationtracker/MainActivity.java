@@ -13,8 +13,13 @@ import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
-    //I added this comment for Jon
+
     private List<Grocery> currentExpireList;
+
+    /**
+     * 
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         currentExpireList = new ArrayList<>();
@@ -22,7 +27,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
     }
 
-
+    /**
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -30,6 +39,11 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -45,16 +59,34 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     *
+     * @param view
+     */
     private void addNewItem(View view){
 
     }
 
+    /**
+     *
+     * @param view
+     */
     private void addExistingItem(View view){
 
     }
 
+    /**
+     *
+     */
     private void sortItems(){
         Collections.sort(currentExpireList);
     }
 
+    /**
+     *
+     */
+    void display(){
+
+    }
 }
+
