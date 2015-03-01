@@ -16,6 +16,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
     private List<Grocery> currentExpireList;
+    BackgroundNotifier monitor;
 
     /**
      *
@@ -60,13 +61,6 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     *
-     * @param view
-     */
-    private void addNewItem(View view){
-
-    }
 
     /**
      *
@@ -93,6 +87,10 @@ public class MainActivity extends ActionBarActivity {
     public void addItem(View view){
         Intent intent = new Intent(this, AddItem.class);
         startActivity(intent);
+
+    }
+
+    protected void addGroceryItem(){
 
     }
 }
