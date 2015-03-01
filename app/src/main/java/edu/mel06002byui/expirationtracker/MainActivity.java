@@ -1,5 +1,6 @@
 package edu.mel06002byui.expirationtracker;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -86,6 +87,12 @@ public class MainActivity extends ActionBarActivity {
      *
      */
     void display(){
+
+    }
+
+    public void addItem(View view){
+        Intent intent = new Intent(this, AddItem.class);
+        startActivity(intent);
 
     }
 }
