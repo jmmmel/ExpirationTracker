@@ -11,6 +11,7 @@ class Grocery implements Comparable<Grocery>{
     Calendar expireDate;
     int quantity;
     private String name;
+    private Object grocery;
 
     /**
      *
@@ -90,10 +91,20 @@ class Grocery implements Comparable<Grocery>{
      * public Date remainingTime(){ return startDate - expireDate; }
      *
      */
-
     @Override
     public String toString(){
         
         return null;
+    }
+
+    @Override
+    public boolean equals(Object compGrocery){
+        return compGrocery.hashCode() == this.hashCode();
+    }
+
+    @Override
+    public int hashCode(){
+
+        return expireDate.hashCode()*name.hashCode();
     }
 }

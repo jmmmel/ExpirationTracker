@@ -7,15 +7,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    private List<Grocery> currentExpireList;
+    private Set<Grocery> currentExpireList;
     BackgroundNotifier monitor;
 
     /**
@@ -24,7 +24,7 @@ public class MainActivity extends ActionBarActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        currentExpireList = new ArrayList<>();
+        currentExpireList = new TreeSet<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
@@ -70,12 +70,6 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    /**
-     *
-     */
-    private void sortItems(){
-        Collections.sort(currentExpireList);
-    }
 
     /**
      *
