@@ -7,11 +7,10 @@ import java.util.Calendar;
  */
 class Grocery implements Comparable<Grocery>{
 
-    Calendar purchaseDate;
-    Calendar expireDate;
-    int quantity;
+    private Calendar purchaseDate;
+    private Calendar expireDate;
+    private int quantity;
     private String name;
-    private Object grocery;
 
     /**
      *
@@ -23,18 +22,24 @@ class Grocery implements Comparable<Grocery>{
     /**
      * Returns the name of the grocery
      *
-     * @return
+     * @return The name of the grocery
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @return
+     * @return returns the purchase date as a Calendar Object
      */
     public Calendar getPurchaseDate() {
         return purchaseDate;
     }
+
+    /**
+     *
+     * @param newName name to be assigned
+     */
+    public void setName(String newName){name = newName;}
 
     /**
      * Sets the Purchase Date
@@ -48,7 +53,7 @@ class Grocery implements Comparable<Grocery>{
     /**
      * Gets the Expiration Date
      *
-     * @return
+     * @return Expiration date as a Calendar object
      */
     public Calendar getExpireDate() {
         return expireDate;
@@ -81,6 +86,11 @@ class Grocery implements Comparable<Grocery>{
         quantity = quantity + addNumber;
     }
 
+    /**
+     *
+     * @param another The grocery object to compare to
+     * @return -1 for less than 0 for the same 1 for greater than
+     */
     @Override
     public int compareTo(Grocery another) {
         return this.getExpireDate().compareTo(another.getExpireDate());
