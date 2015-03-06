@@ -6,7 +6,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -65,6 +68,15 @@ public class MainActivity extends ActionBarActivity {
      *
      */
     void display(){
+        // Get the reference of GroceryList
+        ListView groceryList = (ListView)findViewById(R.id.GroceryList);
+
+        // create an arrayList of groceries
+
+        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, allStoredItems.toArray());
+
+        // Set Adapter
+        groceryList.setAdapter(arrayAdapter);
 
     }
 
