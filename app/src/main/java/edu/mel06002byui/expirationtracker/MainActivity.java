@@ -25,6 +25,7 @@ public class MainActivity extends ActionBarActivity {
         currentExpireList = new TreeSet<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        populateSetOnCreate();
     }
 
     /**
@@ -62,15 +63,6 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      *
-     * @param view
-     */
-    private void addExistingItem(View view){
-
-    }
-
-
-    /**
-     *
      */
     void display(){
 
@@ -83,6 +75,10 @@ public class MainActivity extends ActionBarActivity {
     }
 
     protected void addGroceryItem(){
+
+    }
+
+    private void populateSetOnCreate(){
 
     }
 }
