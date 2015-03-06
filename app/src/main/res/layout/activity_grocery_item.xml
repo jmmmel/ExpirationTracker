@@ -7,6 +7,15 @@
     tools:context="edu.mel06002byui.expirationtracker.GroceryItem">
 
     <TextView android:text="activity that will display the contents for a grocery item" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/GroceryList"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="114dp" />
 
 </RelativeLayout>
