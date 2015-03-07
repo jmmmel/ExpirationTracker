@@ -111,7 +111,7 @@ class Grocery implements Comparable<Grocery>{
         SimpleDateFormat formatter = new SimpleDateFormat();
         formatter.applyPattern("MM/dd/yyyy");
         return name + "\nPurchase Date: " + formatter.format(purchaseDate.getTime())
-                + "Expire Date: " + formatter.format(expireDate.getTime())
+                + "\nExpire Date: " + formatter.format(expireDate.getTime())
                 + "\nDays Left: " + daysBetween(expireDate,Calendar.getInstance());
     }
 
