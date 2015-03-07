@@ -18,15 +18,8 @@ public class GroceryItemActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery_item);
 
-        // Get the reference of GroceryList
-        ListView groceryList = (ListView)findViewById(R.id.GroceryList);
 
-        // create an arrayList of groceries
-        listOfGroceries = new ArrayList<>();
-        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, listOfGroceries);
 
-        // Set Adapter
-        groceryList.setAdapter(arrayAdapter);
 
     }
 
