@@ -13,7 +13,7 @@ import java.util.TreeSet;
 
 public class MainActivity extends ActionBarActivity {
 
-    private Set<Grocery> currentExpireList;
+    private Set<Grocery> allStoredItems;
     BackgroundNotifier monitor;
 
     /**
@@ -22,10 +22,11 @@ public class MainActivity extends ActionBarActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        currentExpireList = new TreeSet<>();
+        allStoredItems = new TreeSet<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         populateSetOnCreate();
+        displayToListView();
     }
 
     /**
@@ -62,9 +63,9 @@ public class MainActivity extends ActionBarActivity {
 
 
     /**
-     *
+     *  updates the list view to hold the set
      */
-    void display(){
+    void displayToListView(){
 
     }
 
@@ -74,10 +75,13 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    protected void addGroceryItem(){
-
+    protected void addGroceryItem(Grocery tempGrocery){
+        allStoredItems.add(tempGrocery);
     }
 
+    /**
+     * This will read in from the database on opening and store into our allStoredItems
+     */
     private void populateSetOnCreate(){
 
     }
