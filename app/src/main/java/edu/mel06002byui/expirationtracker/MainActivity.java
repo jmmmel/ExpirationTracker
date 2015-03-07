@@ -74,7 +74,7 @@ public class MainActivity extends ActionBarActivity {
 
         // create an arrayList of groceries
 
-        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, allStoredItems.toArray());
+        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<Grocery>(this,android.R.layout.simple_list_item_1, (Grocery[]) allStoredItems.toArray());
 
         // Set Adapter
         groceryList.setAdapter(arrayAdapter);
