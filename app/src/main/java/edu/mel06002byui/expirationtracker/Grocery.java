@@ -1,6 +1,9 @@
 package edu.mel06002byui.expirationtracker;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by James on 2/17/2015.
@@ -16,7 +19,9 @@ class Grocery implements Comparable<Grocery>{
      *
      */
     public Grocery() {
-
+        quantity = 0;
+        purchaseDate = new GregorianCalendar();
+        expireDate = new GregorianCalendar();
     }
 
     /**
@@ -103,8 +108,11 @@ class Grocery implements Comparable<Grocery>{
      */
     @Override
     public String toString(){
-        
-        return null;
+        SimpleDateFormat formatter = new SimpleDateFormat();
+        formatter.applyPattern("MM/dd/yyyy");
+        return name + "\nPurchase Date: " + formatter.format(purchaseDate.getTime())
+                + "Expire Date: " + formatter.format(expireDate.getTime())
+                + "\nDays Left: " + daysBetween(expireDate,Calendar.getInstance());
     }
 
     @Override
@@ -116,5 +124,11 @@ class Grocery implements Comparable<Grocery>{
     public int hashCode(){
 
         return expireDate.hashCode()*name.hashCode();
+    }
+
+    private int daysBetween(Calendar startDate, Calendar endDate) {
+        long end = endDate.getTimeInMillis();
+        long start = startDate.getTimeInMillis();
+        return (int)TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
     }
 }

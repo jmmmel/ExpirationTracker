@@ -8,8 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -73,8 +76,9 @@ public class MainActivity extends ActionBarActivity {
         ListView groceryList = (ListView)findViewById(R.id.GroceryList);
 
         // create an arrayList of groceries
-
-        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<Grocery>(this,android.R.layout.simple_list_item_1, (Grocery[]) allStoredItems.toArray());
+        ArrayList<Grocery> tempArray = new ArrayList<>();
+        tempArray.addAll(allStoredItems);
+        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<Grocery>(this,android.R.layout.simple_list_item_1, tempArray);
 
         // Set Adapter
         groceryList.setAdapter(arrayAdapter);
@@ -95,7 +99,24 @@ public class MainActivity extends ActionBarActivity {
      * This will read in from the database on opening and store into our allStoredItems
      */
     private void populateSetOnCreate(){
-
+        Grocery tempGrocery = new Grocery();
+        tempGrocery.setName("Peas");
+        tempGrocery.setExpireDate(new GregorianCalendar(2015,3,14));
+        tempGrocery.setPurchaseDate(Calendar.getInstance());
+        tempGrocery.addValue(5);
+        allStoredItems.add(tempGrocery);
+        tempGrocery = new Grocery();
+        tempGrocery.setName("Carrots");
+        tempGrocery.setExpireDate(new GregorianCalendar(2015,4,14));
+        tempGrocery.setPurchaseDate(Calendar.getInstance());
+        tempGrocery.addValue(3);
+        allStoredItems.add(tempGrocery);
+        tempGrocery = new Grocery();
+        tempGrocery.setName("Banana");
+        tempGrocery.setExpireDate(new GregorianCalendar(2015,3,16));
+        tempGrocery.setPurchaseDate(Calendar.getInstance());
+        tempGrocery.addValue(7);
+        allStoredItems.add(tempGrocery);
     }
 }
 
