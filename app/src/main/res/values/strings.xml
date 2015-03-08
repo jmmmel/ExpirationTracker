@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_grocery_item">GroceryItem</string>
     <string name="title_activity_add_item">AddItem</string>
+    <string name="title_activity_remove_xml">removeXml</string>
 
 </resources>

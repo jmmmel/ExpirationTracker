@@ -16,6 +16,8 @@ import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.TreeSet;
 
+import edu.mel06002byui.expirationtracker.test.removeXml;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -87,6 +89,11 @@ public class MainActivity extends ActionBarActivity {
 
     public void addItem(View view){
         Intent intent = new Intent(this, AddItem.class);
+        startActivity(intent);
+
+    }
+    public void removeXml(View view){
+        Intent intent = new Intent(this, removeXml.class);
         startActivity(intent);
 
     }

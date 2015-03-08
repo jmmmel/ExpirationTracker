@@ -24,6 +24,10 @@
             android:name=".AddItem"
             android:label="@string/title_activity_add_item" >
         </activity>
+        <activity
+            android:name=".test.removeXml"
+            android:label="@string/title_activity_remove_xml" >
+        </activity>
     </application>
 
 </manifest>
