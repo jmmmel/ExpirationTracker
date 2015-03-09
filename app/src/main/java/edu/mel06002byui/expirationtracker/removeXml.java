@@ -1,4 +1,4 @@
-package edu.mel06002byui.expirationtracker.test;
+package edu.mel06002byui.expirationtracker;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
