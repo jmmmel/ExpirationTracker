@@ -1,8 +1,12 @@
 package edu.mel06002byui.expirationtracker;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseErrorHandler;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,14 +17,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
-import edu.mel06002byui.expirationtracker.test.removeXml;
 
 
 public class MainActivity extends ActionBarActivity {
-
+    private static final String TAG_MAIN_ACTIVITY= "MainActivity";
     private Set<Grocery> allStoredItems;
     BackgroundNotifier monitor;
 
@@ -33,6 +37,8 @@ public class MainActivity extends ActionBarActivity {
         allStoredItems = new TreeSet<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
     }

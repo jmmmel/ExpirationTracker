@@ -2,6 +2,7 @@ package edu.mel06002byui.expirationtracker;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +23,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 
 public class AddItem extends ActionBarActivity {
-
+    private static final String TAG_ADD_ITEM = "AddItem";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,10 +103,12 @@ public class AddItem extends ActionBarActivity {
 
 
         }catch(ParserConfigurationException pce){
+            Log.e(TAG_ADD_ITEM,"Nothing to parse",pce);
             pce.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            Log.e(TAG_ADD_ITEM,"IO",e);
             e.printStackTrace();
         }
 

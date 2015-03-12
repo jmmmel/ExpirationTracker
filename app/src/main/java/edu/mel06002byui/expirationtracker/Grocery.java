@@ -34,6 +34,13 @@ class Grocery implements Comparable<Grocery>{
     }
 
     /**
+     *  returns the quantity of a grocery item
+     *  needed for Database
+     * @return
+     */
+    public int getQuantity() { return quantity; }
+
+    /**
      * @return returns the purchase date as a Calendar Object
      */
     public Calendar getPurchaseDate() {
