@@ -14,6 +14,8 @@ class Grocery implements Comparable<Grocery>{
     private Calendar expireDate;
     private int quantity;
     private String name;
+    // needed for primary key of the database
+    int id;
 
     /**
      *
@@ -23,7 +25,13 @@ class Grocery implements Comparable<Grocery>{
         purchaseDate = new GregorianCalendar();
         expireDate = new GregorianCalendar();
     }
-
+    public Grocery(int tempID, String tempName, int tempQuantity){
+        id = tempID;
+        quantity = tempQuantity;
+        name = tempName;
+        purchaseDate = new GregorianCalendar();
+        expireDate = new GregorianCalendar();
+    }
     /**
      * Returns the name of the grocery
      *
@@ -41,12 +49,28 @@ class Grocery implements Comparable<Grocery>{
     public int getQuantity() { return quantity; }
 
     /**
+     * gets id
+     * @return
+     */
+    public int getID() { return id; }
+    /**
      * @return returns the purchase date as a Calendar Object
      */
     public Calendar getPurchaseDate() {
         return purchaseDate;
     }
 
+    /**
+     * set Id
+     * @param id
+     */
+    public void setId(int id) { this.id = id; }
+
+    /**
+     * set quantity
+     * @param newQuantity
+     */
+    public void setQuantity(int newQuantity){ quantity = newQuantity; }
     /**
      *
      * @param newName name to be assigned
@@ -138,4 +162,5 @@ class Grocery implements Comparable<Grocery>{
         long start = startDate.getTimeInMillis();
         return (int)TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
     }
+
 }
