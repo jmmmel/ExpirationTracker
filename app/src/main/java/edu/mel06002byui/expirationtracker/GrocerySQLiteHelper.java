@@ -82,28 +82,36 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     /**
      * gets a single grocery based of its id
      * @param id
-     * @return
+     * @return grocery
      */
     public Grocery getGrocery(int id){
+        Grocery grocery = null;
+        try {
+            // get reference to readable DB
+            SQLiteDatabase db = this.getReadableDatabase();
 
-        // get reference to readable DB
-        SQLiteDatabase db = this.getReadableDatabase();
+            // build query
+            Cursor cursor = db.query(TABLE_GROCERIES, COLUMNS, " id = ?"
+                    , new String[]{String.valueOf(id)}, null, null, null, null);
+            // if a result is returned get the first result
+            if (cursor != null)
+                cursor.moveToFirst();
 
-        // build query
-        Cursor cursor = db.query(TABLE_GROCERIES, COLUMNS, " id = ?"
-                , new String[]{String.valueOf(id)}, null, null, null, null);
-        // if a result is returned get the first result
-        if (cursor != null)
-            cursor.moveToFirst();
+            if (cursor != null) {
+                grocery = new Grocery(Integer.parseInt(cursor.getString(0))
+                        , cursor.getString(1), Integer.parseInt(cursor.getString(2)));
 
-        Grocery grocery = new Grocery(Integer.parseInt(cursor.getString(0))
-                , cursor.getString(1), Integer.parseInt(cursor.getString(2)));
+                cursor.close();
+            }
+        } catch(NullPointerException e){
+            Log.e("getGrocery", grocery.toString());
+        }
         return grocery;
     }
 
     /**
      * will create a set of groceries that will be returned
-     * @return
+     * @return setOfGroceries
      */
     public Set<Grocery> getAllGroceries(){
         Set<Grocery> setOfGroceries = new TreeSet<>();
@@ -128,6 +136,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
                 setOfGroceries.add(grocery);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         // log
         Log.d("getAllGroceries", setOfGroceries.toString());
 
