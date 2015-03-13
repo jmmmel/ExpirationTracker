@@ -41,7 +41,7 @@ public class MainActivity extends ActionBarActivity {
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
-        GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
+        
     }
 
     /**
