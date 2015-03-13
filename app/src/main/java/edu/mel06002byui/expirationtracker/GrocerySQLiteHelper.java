@@ -32,8 +32,9 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     private static final String KEY_QUANTITY = "quantity";
     private static final String[] COLUMNS = {KEY_ID, KEY_NAME, KEY_QUANTITY};
 
-    public GrocerySQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    // default constructor
+    public GrocerySQLiteHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
