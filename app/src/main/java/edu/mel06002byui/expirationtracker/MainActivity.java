@@ -5,12 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,7 +24,7 @@ import java.util.TreeSet;
 
 public class MainActivity extends ActionBarActivity {
     private static final String TAG_MAIN_ACTIVITY= "MainActivity";
-    private Set<Grocery> allStoredItems;
+    private Set<Grocery> allStoredItems = new TreeSet<>();;
     BackgroundNotifier monitor;
     private AlertDialog.Builder dialogBuilder;
 
@@ -32,7 +34,6 @@ public class MainActivity extends ActionBarActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        allStoredItems = new TreeSet<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -111,7 +112,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                  name = txtInput.getText().toString();
-                Toast.makeText(getApplicationContext(), name , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
