@@ -8,15 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.TreeSet;
-
-import edu.mel06002byui.expirationtracker.test.removeXml;
 
 
 public class MainActivity extends ActionBarActivity {

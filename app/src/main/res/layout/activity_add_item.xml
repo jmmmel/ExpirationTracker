@@ -23,31 +23,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/nameText"
-        android:hint="Name of Item"
+        android:hint="name"
         android:layout_alignParentTop="true"
         android:layout_marginTop="23dp"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_alignParentRight="true" />
+        android:layout_toRightOf="@+id/textView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Expiration Date (estimate if none available)"
+        android:text="Expiration Date"
         android:id="@+id/ExpView"
         android:layout_below="@+id/nameText"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <DatePicker
-        android:datePickerMode="spinner"
-        android:calendarViewShown="false"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/datePicker"
-        android:layout_below="@+id/ExpView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="23dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,7 +45,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Quantity"
         android:id="@+id/QuantityView2"
-        android:layout_below="@+id/datePicker"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -65,18 +55,18 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/QuantityText"
-        android:layout_below="@+id/QuantityView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/QuantityView2" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"
         android:id="@+id/FinalAddbutton"
-        android:onClick="finalAdd"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignRight="@+id/ExpView"
+        android:layout_alignEnd="@+id/ExpView"
+        android:layout_marginBottom="71dp"
+        android:onClick="finalAdd"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -84,9 +74,18 @@
         android:text="Cancel"
         android:id="@+id/Cancelbutton"
         android:onClick="CancelAdd"
-        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/FinalAddbutton"
         android:layout_centerHorizontal="true" />
 
+    <DatePicker
+        android:datePickerMode="spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/datePicker"
 
+        android:layout_below="@+id/ExpView"
+        android:layout_above="@+id/QuantityView2"
+        android:layout_toRightOf="@+id/ExpView"
+        android:layout_toEndOf="@+id/ExpView" />
 
 </RelativeLayout>
