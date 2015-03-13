@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
  */
 class Grocery implements Comparable<Grocery>{
 
-    private Calendar purchaseDate;
     private Calendar expireDate;
     private int quantity;
     private String name;
@@ -21,16 +20,20 @@ class Grocery implements Comparable<Grocery>{
      *
      */
     public Grocery() {
+        name = "";
         quantity = 0;
-        purchaseDate = new GregorianCalendar();
         expireDate = new GregorianCalendar();
     }
     public Grocery(int tempID, String tempName, int tempQuantity){
         id = tempID;
         quantity = tempQuantity;
         name = tempName;
-        purchaseDate = new GregorianCalendar();
         expireDate = new GregorianCalendar();
+    }
+    public Grocery(String name, int quantity, int expireMonth, int expireDay, int expireYear){
+        this.name = name;
+        this.quantity = quantity;
+        expireDate = new GregorianCalendar(expireYear,expireMonth,expireDay);
     }
     /**
      * Returns the name of the grocery
@@ -40,7 +43,6 @@ class Grocery implements Comparable<Grocery>{
     public String getName() {
         return name;
     }
-
     /**
      *  returns the quantity of a grocery item
      *  needed for Database
@@ -53,12 +55,6 @@ class Grocery implements Comparable<Grocery>{
      * @return
      */
     public int getID() { return id; }
-    /**
-     * @return returns the purchase date as a Calendar Object
-     */
-    public Calendar getPurchaseDate() {
-        return purchaseDate;
-    }
 
     /**
      * set Id
@@ -77,14 +73,6 @@ class Grocery implements Comparable<Grocery>{
      */
     public void setName(String newName){name = newName;}
 
-    /**
-     * Sets the Purchase Date
-     *
-     * @param pDate This is the purchase date
-     */
-    public void setPurchaseDate(Calendar pDate) {
-        purchaseDate = pDate;
-    }
 
     /**
      * Gets the Expiration Date
@@ -141,8 +129,7 @@ class Grocery implements Comparable<Grocery>{
     public String toString(){
         SimpleDateFormat formatter = new SimpleDateFormat();
         formatter.applyPattern("MM/dd/yyyy");
-        return name + "\nPurchase Date: " + formatter.format(purchaseDate.getTime())
-                + "\nExpire Date: " + formatter.format(expireDate.getTime())
+        return name + "\nExpire Date: " + formatter.format(expireDate.getTime())
                 + "\nDays Left: " + daysBetween(expireDate,Calendar.getInstance());
     }
 
