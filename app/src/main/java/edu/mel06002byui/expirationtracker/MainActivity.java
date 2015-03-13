@@ -109,19 +109,16 @@ public class MainActivity extends ActionBarActivity {
         Grocery tempGrocery = new Grocery();
         tempGrocery.setName("Peas");
         tempGrocery.setExpireDate(new GregorianCalendar(2015,3,14));
-        tempGrocery.setPurchaseDate(Calendar.getInstance());
         tempGrocery.addValue(5);
         allStoredItems.add(tempGrocery);
         tempGrocery = new Grocery();
         tempGrocery.setName("Carrots");
         tempGrocery.setExpireDate(new GregorianCalendar(2015,4,14));
-        tempGrocery.setPurchaseDate(Calendar.getInstance());
         tempGrocery.addValue(3);
         allStoredItems.add(tempGrocery);
         tempGrocery = new Grocery();
         tempGrocery.setName("Banana");
         tempGrocery.setExpireDate(new GregorianCalendar(2015,3,16));
-        tempGrocery.setPurchaseDate(Calendar.getInstance());
         tempGrocery.addValue(7);
         allStoredItems.add(tempGrocery);
     }
