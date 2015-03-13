@@ -1,5 +1,7 @@
 package edu.mel06002byui.expirationtracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -7,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ public class MainActivity extends ActionBarActivity {
     private static final String TAG_MAIN_ACTIVITY= "MainActivity";
     private Set<Grocery> allStoredItems;
     BackgroundNotifier monitor;
+    private AlertDialog.Builder dialogBuilder;
 
     /**
      *
@@ -87,9 +91,39 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    String name = "ItemName";
+
     public void addItem(View view){
         Intent intent = new Intent(this, AddItem.class);
-        startActivity(intent);
+       // startActivity(intent);
+
+
+        dialogBuilder = new AlertDialog.Builder(this);
+        final EditText txtInput = new EditText(this);
+        name = "ItemName";
+
+
+        dialogBuilder.setTitle("Add Item");
+        dialogBuilder.setMessage("Name of Item");
+        dialogBuilder.setView(txtInput);
+        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                 name = txtInput.getText().toString();
+                Toast.makeText(getApplicationContext(), name , Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+
+            public void onClick(DialogInterface dialog, int which)
+            {
+                Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        AlertDialog dialogName = dialogBuilder.create();
+        dialogName.show();
 
     }
     public void removeXml(View view){
