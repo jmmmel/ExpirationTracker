@@ -105,7 +105,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    protected void addGroceryItem(Grocery tempGrocery){
+    protected void addGroceryItemToSet(Grocery tempGrocery){
         allStoredItems.add(tempGrocery);
     }
 
