@@ -1,6 +1,7 @@
 package edu.mel06002byui.expirationtracker;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Set;
@@ -92,41 +96,42 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    String name = "ItemName";
+    Button addButton;
 
     public void addItem(View view){
-        Intent intent = new Intent(this, AddItem.class);
+        //Intent intent = new Intent(this, AddItem.class);
        // startActivity(intent);
 
+        final Dialog custom = new Dialog(MainActivity.this);
 
-        dialogBuilder = new AlertDialog.Builder(this);
-        final EditText txtInput = new EditText(this);
-        name = "ItemName";
+        custom.setContentView(R.layout.activity_add_item);
+        custom.setTitle("Add Item");
 
-
-        dialogBuilder.setTitle("Add Item");
-        dialogBuilder.setMessage("Name of Item");
-        dialogBuilder.setView(txtInput);
-        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        addButton = (Button)custom.findViewById(R.id.FinalAddbutton);
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                 name = txtInput.getText().toString();
-                Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+
+                EditText nameEdit = (EditText) custom.findViewById(R.id.nameText);
+                DatePicker expDate = (DatePicker) custom.findViewById(R.id.datePicker);
+                EditText quantityEdit = (EditText) custom.findViewById(R.id.QuantityText);
+                String name = nameEdit.getText().toString();
+                String quantity = quantityEdit.getText().toString();
+                int Day = expDate.getDayOfMonth();
+                int month = expDate.getMonth();
+                int year = expDate.getYear();
+                custom.cancel();
             }
         });
-        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
 
-            public void onClick(DialogInterface dialog, int which)
-            {
-                Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
 
-            }
-        });
-
-        AlertDialog dialogName = dialogBuilder.create();
-        dialogName.show();
-
+        custom.show();
     }
+
+    //public void finalAdd(View view){
+
+   // }
+
     public void removeXml(View view){
         Intent intent = new Intent(this, removeXml.class);
         startActivity(intent);
