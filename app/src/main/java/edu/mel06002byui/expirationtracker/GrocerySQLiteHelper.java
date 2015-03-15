@@ -25,7 +25,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
     /*******************************************************************
      * constants for table and column names
-     */
+     *******************************************************************/
     private static final String TABLE_GROCERIES = "groceries";
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
@@ -41,7 +41,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // SQL statement to create groceries table
         String Create_Grocery_Table = "CREATE TABLE groceries ( " +
-                "id INTEGER PRIMARY KEY AUTOINCMREMENT, " +
+                "id INTEGER PRIMARY KEY, " +
                 "name TEXT, " +
                 "quantity TEXT )";
         Log.i(TAG_GROCERY_DB, "Creating table");

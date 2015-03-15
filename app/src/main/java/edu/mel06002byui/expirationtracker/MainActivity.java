@@ -40,7 +40,6 @@ public class MainActivity extends ActionBarActivity {
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
-
     }
 
     /**
@@ -157,6 +156,12 @@ public class MainActivity extends ActionBarActivity {
         tempGrocery.setExpireDate(new GregorianCalendar(2015,3,16));
         tempGrocery.addValue(7);
         allStoredItems.add(tempGrocery);
+        Grocery temp = new Grocery(1,"Carrotsdb",1);
+        Log.i("main",temp.toString());
+        Log.i("main","creating db" );
+        GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
+        db.addGrocery(temp);
+        allStoredItems.add(db.getGrocery(temp.getID()));
     }
 }
 
