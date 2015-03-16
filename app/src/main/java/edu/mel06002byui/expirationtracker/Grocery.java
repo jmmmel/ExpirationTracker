@@ -159,7 +159,11 @@ class Grocery implements Comparable<Grocery>{
      * @param newDate string in format MM/dd/yyyy
      */
     public void setDateWithString(String newDate){
-
+        String[] tokens = newDate.split("/");
+        int month = Integer.parseInt(tokens[0]);
+        int day = Integer.parseInt(tokens[1]);
+        int year = Integer.parseInt(tokens[2]);
+        expireDate = new GregorianCalendar(year,month,day);
     }
 
 }
