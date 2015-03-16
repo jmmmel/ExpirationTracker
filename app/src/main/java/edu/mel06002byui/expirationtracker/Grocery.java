@@ -127,9 +127,7 @@ class Grocery implements Comparable<Grocery>{
      */
     @Override
     public String toString(){
-        SimpleDateFormat formatter = new SimpleDateFormat();
-        formatter.applyPattern("MM/dd/yyyy");
-        return name + "\nExpire Date: " + formatter.format(expireDate.getTime())
+        return name + "\nExpire Date: " + dateAsString()
                 + "\nDays Left: " + daysBetween(expireDate,Calendar.getInstance());
     }
 
@@ -148,6 +146,24 @@ class Grocery implements Comparable<Grocery>{
         long end = endDate.getTimeInMillis();
         long start = startDate.getTimeInMillis();
         return (int)TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
+    }
+
+    public String dateAsString(){
+        SimpleDateFormat formatter = new SimpleDateFormat();
+        formatter.applyPattern("MM/dd/yyyy");
+        return formatter.format(expireDate.getTime());
+    }
+
+    /**
+     * Used to set the date with a string
+     * @param newDate string in format MM/dd/yyyy
+     */
+    public void setDateWithString(String newDate){
+        String[] tokens = newDate.split("/");
+        int month = Integer.parseInt(tokens[0]);
+        int day = Integer.parseInt(tokens[1]);
+        int year = Integer.parseInt(tokens[2]);
+        expireDate = new GregorianCalendar(year,month,day);
     }
 
 }

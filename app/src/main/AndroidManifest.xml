@@ -17,17 +17,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GroceryItem"
-            android:label="@string/title_activity_grocery_item" >
-        </activity>
-        <activity
-            android:name=".AddItem"
-            android:label="@string/title_activity_add_item" >
-        </activity>
-        <activity
             android:name=".removeXml"
             android:label="@string/title_activity_remove_xml" >
         </activity>
+        <service
+            android:name=".BackgroundNotifier"
+            android:exported="false"
+            />
     </application>
 
 </manifest>
