@@ -146,27 +146,32 @@ public class MainActivity extends ActionBarActivity {
      * This will read in from the database on opening and store into our allStoredItems
      */
     private void populateSetOnCreate(){
+        GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
+
         Grocery tempGrocery = new Grocery();
         tempGrocery.setName("Peas");
-        tempGrocery.setExpireDate(new GregorianCalendar(2015,3,14));
+        tempGrocery.setExpireDate(new GregorianCalendar(2015, 3, 14));
         tempGrocery.addValue(5);
-        allStoredItems.add(tempGrocery);
+        //allStoredItems.add(tempGrocery);
+        db.addGroceryToDatabase(tempGrocery);
+        allStoredItems.add(db.getGroceryByName(tempGrocery.getName()));
+
         tempGrocery = new Grocery();
         tempGrocery.setName("Carrots");
         tempGrocery.setExpireDate(new GregorianCalendar(2015,4,14));
         tempGrocery.addValue(3);
-        allStoredItems.add(tempGrocery);
+        //allStoredItems.add(tempGrocery);
+        db.addGroceryToDatabase(tempGrocery);
+        allStoredItems.add(db.getGroceryByName(tempGrocery.getName()));
+
         tempGrocery = new Grocery();
         tempGrocery.setName("Banana");
         tempGrocery.setExpireDate(new GregorianCalendar(2015,3,16));
         tempGrocery.addValue(7);
-        allStoredItems.add(tempGrocery);
-        Grocery temp = new Grocery(1,"Carrotsdb",1);
-        Log.i("main",temp.toString());
-        Log.i("main","creating db" );
-        GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
-        db.addGroceryToDatabase(temp);
-        allStoredItems.add(db.getGrocery(temp.getID()));
+        //allStoredItems.add(tempGrocery);
+        db.addGroceryToDatabase(tempGrocery);
+        allStoredItems.add(db.getGroceryByName(tempGrocery.getName()));
+
     }
 }
 
