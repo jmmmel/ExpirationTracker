@@ -165,7 +165,7 @@ public class MainActivity extends ActionBarActivity {
         Log.i("main",temp.toString());
         Log.i("main","creating db" );
         GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
-        db.addGrocery(temp);
+        db.addGroceryToDatabase(temp);
         allStoredItems.add(db.getGrocery(temp.getID()));
     }
 }

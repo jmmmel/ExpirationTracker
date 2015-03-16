@@ -30,6 +30,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_QUANTITY = "quantity";
+    private static final String KEY_EXPIRATION_DATE = "expirationDate";
     private static final String[] COLUMNS = {KEY_ID, KEY_NAME, KEY_QUANTITY};
 
     // default constructor
@@ -37,14 +38,18 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     *
+     * @param db // database object
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         // SQL statement to create groceries table
         String Create_Grocery_Table = "CREATE TABLE groceries ( " +
                 "id INTEGER PRIMARY KEY, " +
                 "name TEXT, " +
-                "quantity TEXT )";
-        Log.i(TAG_GROCERY_DB, "Creating table");
+                "quantity TEXT, " +
+                "expirationDate TEXT)";
 
         // create groceries table
         db.execSQL(Create_Grocery_Table);
@@ -58,11 +63,11 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public void addGrocery(Grocery grocery){
+    public void addGroceryToDatabase(Grocery grocery){
         // log
         Log.d("addGrocery", grocery.toString());
 
-        // get reference to writable BD
+        // get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // create contentValues to add to key column
@@ -73,6 +78,9 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         // get quantity and put in values
         values.put(KEY_QUANTITY, grocery.getQuantity());
 
+        //get expiration date and put it in values
+        values.put(KEY_EXPIRATION_DATE, grocery.dateAsString());
+
         // insert into table
         db.insert(TABLE_GROCERIES, null, values);
 
@@ -81,7 +89,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * gets a single grocery based of its id
-     * @param id
+     * @param id // id is the primary key
      * @return grocery
      */
     public Grocery getGrocery(int id){
@@ -120,6 +128,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_GROCERIES;
 
         SQLiteDatabase db = this.getWritableDatabase();
+
         Cursor cursor = db.rawQuery(query,null);
 
         //go through each row and build a grocery item and add
@@ -127,16 +136,22 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         Grocery grocery = null;
         if (cursor.moveToFirst()){
 
+            // loop through the cursor and create a grocery object and add it to
+            // the set of groceries
             do{
+                // create Grocery object
                 grocery = new Grocery();
                 grocery.setId(Integer.parseInt(cursor.getString(0)));
                 grocery.setName(cursor.getString(1));
                 grocery.setQuantity(Integer.parseInt(cursor.getString(2)));
 
+                // add grocery object to set
                 setOfGroceries.add(grocery);
             } while (cursor.moveToNext());
         }
+
         cursor.close();
+
         // log
         Log.d("getAllGroceries", setOfGroceries.toString());
 
@@ -148,7 +163,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         // get reference to writable db
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // create contentvalues to add key column/value
+        // create contentValues to add key column/value
         ContentValues values = new ContentValues();
         values.put("name", grocery.getName());
         values.put("quantity", grocery.getQuantity());
