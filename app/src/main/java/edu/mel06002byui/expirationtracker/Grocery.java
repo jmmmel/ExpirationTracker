@@ -14,23 +14,41 @@ class Grocery implements Comparable<Grocery>{
     private int quantity;
     private String name;
     // needed for primary key of the database
-    int id;
+    private int id;
 
     /**
      *
      */
     public Grocery() {
-        name = "";
+        id = -1;
+        name = "Unknown";
         quantity = 0;
         expireDate = new GregorianCalendar();
     }
+
+    /**
+     *
+     * @param tempID // primary key
+     * @param tempName // temporary name
+     * @param tempQuantity temporary quantity
+     */
     public Grocery(int tempID, String tempName, int tempQuantity){
         id = tempID;
         quantity = tempQuantity;
         name = tempName;
         expireDate = new GregorianCalendar();
     }
+
+    /**
+     *
+     * @param name // variable for constructor
+     * @param quantity // variable for constructor
+     * @param expireMonth // variable for constructor
+     * @param expireDay // variable for constructor
+     * @param expireYear // variable for constructor
+     */
     public Grocery(String name, int quantity, int expireMonth, int expireDay, int expireYear){
+        id = -1; // -1 means that this object hasn't been sent to the DB
         this.name = name;
         this.quantity = quantity;
         expireDate = new GregorianCalendar(expireYear,expireMonth,expireDay);
@@ -127,7 +145,7 @@ class Grocery implements Comparable<Grocery>{
      */
     @Override
     public String toString(){
-        return name + "\nExpire Date: " + dateAsString()
+        return "ID: " + id +"\n" + name + "\nExpire Date: " + dateAsString()
                 + "\nDays Left: " + daysBetween(expireDate,Calendar.getInstance());
     }
 
