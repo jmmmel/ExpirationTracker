@@ -146,12 +146,28 @@ public class MainActivity extends ActionBarActivity {
     }
 
     protected void addGroceryItemToSet(Grocery tempGrocery){
-        db.addGroceryToDatabase(tempGrocery);
+
 
         /*check if contains
             if true find it and increase quantity then update DB
             false add to DB then add to set from DB
          */
+        if(allStoredItems.contains(tempGrocery)){
+            Grocery toUpdate = findInSet(tempGrocery);
+            toUpdate.addQuantity(tempGrocery.getQuantity());
+            db.updateGroceryDB(toUpdate);
+        }
+        else{
+            int newID = db.addGroceryToDatabase(tempGrocery);
+            allStoredItems.add(db.getGroceryByID(newID));
+        }
+    }
+    private Grocery findInSet(Grocery find){
+        for(Grocery check: allStoredItems){
+            if(check.equals(find))
+                return check;
+        }
+        return find;
     }
 
     /**

@@ -85,7 +85,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
      *
      * @param grocery
      */
-    public void addGroceryToDatabase(Grocery grocery){
+    public int addGroceryToDatabase(Grocery grocery){
         // log
         Log.d("addGroceryToDatabase", grocery.toString());
 
@@ -107,6 +107,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         db.insert(TABLE_GROCERIES, null, values);
 
         db.close();
+        return -1;
     }
 
     public void checkItemIfExists(){}
