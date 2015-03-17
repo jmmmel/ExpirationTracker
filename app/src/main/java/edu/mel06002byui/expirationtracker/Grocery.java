@@ -20,7 +20,8 @@ class Grocery implements Comparable<Grocery>{
      *
      */
     public Grocery() {
-        name = "";
+        id = -1;
+        name = "Unknown";
         quantity = 0;
         expireDate = new GregorianCalendar();
     }
@@ -144,7 +145,7 @@ class Grocery implements Comparable<Grocery>{
      */
     @Override
     public String toString(){
-        return name + "\nExpire Date: " + dateAsString()
+        return "ID: " + id +"\n" + name + "\nExpire Date: " + dateAsString()
                 + "\nDays Left: " + daysBetween(expireDate,Calendar.getInstance());
     }
 

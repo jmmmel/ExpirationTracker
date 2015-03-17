@@ -49,12 +49,22 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // SQL statement to create groceries table
         String Create_Grocery_Table = "CREATE TABLE groceries ( " +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT, " +
-                "quantity TEXT, ";
+                "quantity TEXT, " +
+                "expirationDate TEXT)";
+
+        String DROP_TABLE ="DROP TABLE IF EXISTS " + TABLE_GROCERIES;
+        db.execSQL(DROP_TABLE);
+
+        String Alter_table = "ALTER TABLE groceries ADD COLUMN expirationDate TEXT";
+
+        Log.d("onCreate in DB", db.toString());
 
         // create groceries table
         db.execSQL(Create_Grocery_Table);
+        //db.execSQL("ALTER TABLE groceries ADD COLUMN expirationDate TEXT;");
+
     }
 
     /**
@@ -91,13 +101,15 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         values.put(KEY_QUANTITY, grocery.getQuantity());
 
         //get expiration date and put it in values
-        //values.put(KEY_EXPIRATION_DATE, grocery.dateAsString());
+        values.put(KEY_EXPIRATION_DATE, grocery.dateAsString());
 
         // insert into table
         db.insert(TABLE_GROCERIES, null, values);
 
         db.close();
     }
+
+    public void checkItemIfExists(){}
 
     /**
      * gets a single grocery based of its id
@@ -152,11 +164,11 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         Grocery grocery = new Grocery();
         if (cursor != null){
             cursor.moveToFirst();
-
+            Log.d("getGroceryByName()", (cursor.getString(0)));
             grocery.setId(Integer.parseInt(cursor.getString(0)));
             grocery.setName(cursor.getString(1));
             grocery.setQuantity(Integer.parseInt(cursor.getString(2)));
-
+            //grocery.setDateWithString(cursor.getString(3));
         }
         Log.d("getGroceryByName(" +grocery.getID()+")", grocery.toString());
         cursor.close();
@@ -232,7 +244,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
      *
      * @param grocery
      */
-    public void deleteItem(Grocery grocery){
+    public void deleteItemFromDB(Grocery grocery){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -243,5 +255,16 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         db.close();
 
         Log.d("deleteItem", grocery.toString());
+    }
+
+    public boolean expiringItems(){
+        // return true is items are going to expire within the next week
+        return false;
+    }
+
+    public void updateGroceryDB(Grocery grocery){
+        //get id from grocery to access the correct row in the DB
+        // change all data in row to the current grocery
+
     }
 }

@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
     private Set<Grocery> allStoredItems = new TreeSet<>();;
     BackgroundNotifier monitor;
     private AlertDialog.Builder dialogBuilder;
-
+    private GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
     /**
      *
      * @param savedInstanceState
@@ -117,9 +117,16 @@ public class MainActivity extends ActionBarActivity {
                 EditText quantityEdit = (EditText) custom.findViewById(R.id.QuantityText);
                 String name = nameEdit.getText().toString();
                 String quantity = quantityEdit.getText().toString();
+                int quantityAsInt = Integer.parseInt(quantity);
                 int Day = expDate.getDayOfMonth();
                 int month = expDate.getMonth();
                 int year = expDate.getYear();
+
+                Grocery grocery = new Grocery(name, quantityAsInt, month, Day, year);
+
+                addGroceryItemToSet(grocery);
+
+                displayToListView();
                 custom.cancel();
             }
         });
@@ -139,15 +146,20 @@ public class MainActivity extends ActionBarActivity {
     }
 
     protected void addGroceryItemToSet(Grocery tempGrocery){
-        allStoredItems.add(tempGrocery);
+        db.addGroceryToDatabase(tempGrocery);
+
+        /*check if contains
+            if true find it and increase quantity then update DB
+            false add to DB then add to set from DB
+         */
     }
 
     /**
      * This will read in from the database on opening and store into our allStoredItems
      */
     private void populateSetOnCreate(){
-        GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
 
+/*
         Grocery tempGrocery = new Grocery();
         tempGrocery.setName("Peas");
         tempGrocery.setExpireDate(new GregorianCalendar(2015, 3, 14));
@@ -171,7 +183,7 @@ public class MainActivity extends ActionBarActivity {
         //allStoredItems.add(tempGrocery);
         db.addGroceryToDatabase(tempGrocery);
         allStoredItems.add(db.getGroceryByName(tempGrocery.getName()));
-
+*/
     }
 }
 
