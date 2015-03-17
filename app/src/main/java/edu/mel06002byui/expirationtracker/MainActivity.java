@@ -44,6 +44,7 @@ public class MainActivity extends ActionBarActivity {
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
+        startService(new Intent(this, BackgroundNotifier.class));
     }
 
     /**
@@ -117,7 +118,7 @@ public class MainActivity extends ActionBarActivity {
                 EditText quantityEdit = (EditText) custom.findViewById(R.id.QuantityText);
                 String name = nameEdit.getText().toString();
                 String quantity = quantityEdit.getText().toString();
-                int Day = expDate.getDayOfMonth();
+                int day = expDate.getDayOfMonth();
                 int month = expDate.getMonth();
                 int year = expDate.getYear();
                 custom.cancel();
@@ -139,7 +140,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     protected void addGroceryItemToSet(Grocery tempGrocery){
+
         allStoredItems.add(tempGrocery);
+
     }
 
     /**
