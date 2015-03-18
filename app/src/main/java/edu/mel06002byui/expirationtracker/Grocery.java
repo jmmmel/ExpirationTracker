@@ -1,5 +1,7 @@
 package edu.mel06002byui.expirationtracker;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -178,7 +180,9 @@ class Grocery implements Comparable<Grocery>{
      */
     public void setDateWithString(String newDate){
         String[] tokens = newDate.split("/");
-        int month = Integer.parseInt(tokens[0]);
+        if(tokens.length != 3)
+            Log.d("SetDateWithString", "Incorrect Format");
+        int month = Integer.parseInt(tokens[0])-1;
         int day = Integer.parseInt(tokens[1]);
         int year = Integer.parseInt(tokens[2]);
         expireDate = new GregorianCalendar(year,month,day);

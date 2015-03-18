@@ -110,7 +110,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         idToReturn = db.insert(TABLE_GROCERIES, null, values);
         Log.d("Inserting Table " + idToReturn,"*******************");
         db.close();
-        return idToReturn;
+        return idToReturn+1;
     }
 
     public void checkItemIfExists(){}
