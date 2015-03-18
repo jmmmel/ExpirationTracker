@@ -14,13 +14,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by James on 2/26/2015.
  */
 public class BackgroundNotifier extends Service {
 
-    public static final long NOTIFY_INTERVAL = 20 * 1000; // 20 seconds
+    public static final long NOTIFY_INTERVAL
+            = TimeUnit.SECONDS.convert(7, TimeUnit.DAYS) * 1000; // 7 days
     private GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
     private NotificationCompat.Builder notifyBuilder
             = new NotificationCompat.Builder(this);
