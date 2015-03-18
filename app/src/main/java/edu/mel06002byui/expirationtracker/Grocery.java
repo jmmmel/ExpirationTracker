@@ -148,7 +148,7 @@ class Grocery implements Comparable<Grocery>{
     @Override
     public String toString(){
         return name + "\nExpire Date: " + dateAsString()
-                + "\nDays Left: " + daysBetween(expireDate,Calendar.getInstance())
+                + "\nDays Left: " + daysBetween(expireDate, todayTrimmed())
                 + "\nQuantity: " + quantity;
 
     }
@@ -160,14 +160,14 @@ class Grocery implements Comparable<Grocery>{
 
     @Override
     public int hashCode(){
-
-        return expireDate.hashCode()*name.hashCode();
+        String allCapsName = name.toUpperCase();
+        return expireDate.hashCode()*allCapsName.hashCode();
     }
 
     private int daysBetween(Calendar startDate, Calendar endDate) {
         long end = endDate.getTimeInMillis();
         long start = startDate.getTimeInMillis();
-        return (int)TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
+        return (int)TimeUnit.MILLISECONDS.toDays(start-end);
     }
 
     public String dateAsString(){
@@ -192,4 +192,12 @@ class Grocery implements Comparable<Grocery>{
         expireDate = new GregorianCalendar(year,month,day);
     }
 
+    private Calendar todayTrimmed() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal;
+    }
 }
