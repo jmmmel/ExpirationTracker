@@ -170,7 +170,7 @@ class Grocery implements Comparable<Grocery>{
 
     public String dateAsString(){
         SimpleDateFormat formatter = new SimpleDateFormat();
-        formatter.applyPattern("MM/dd/yyyy");
+        formatter.applyPattern("yyyy-MM-dd");
         return formatter.format(expireDate.getTime());
     }
 
@@ -179,12 +179,14 @@ class Grocery implements Comparable<Grocery>{
      * @param newDate string in format MM/dd/yyyy
      */
     public void setDateWithString(String newDate){
-        String[] tokens = newDate.split("/");
-        if(tokens.length != 3)
+        String[] tokens = newDate.split("-");
+        if(tokens.length != 3) {
             Log.d("SetDateWithString", "Incorrect Format");
-        int month = Integer.parseInt(tokens[0])-1;
-        int day = Integer.parseInt(tokens[1]);
-        int year = Integer.parseInt(tokens[2]);
+            return;
+        }
+        int year = Integer.parseInt(tokens[0]);
+        int month = Integer.parseInt(tokens[1])-1;
+        int day = Integer.parseInt(tokens[2]);
         expireDate = new GregorianCalendar(year,month,day);
     }
 
