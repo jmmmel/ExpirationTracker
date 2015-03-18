@@ -36,7 +36,7 @@ public class BackgroundNotifier extends Service {
     public void onCreate() {
 
         notifyBuilder.setSmallIcon(R.drawable.warning_image);
-        notifyBuilder.setContentText("You have some items expiring in the next week!");
+
         notifyBuilder.setContentTitle("Expiring");
         Toast.makeText(this, "Notificatons Started", Toast.LENGTH_LONG).show();
         // cancel if already existed
@@ -73,6 +73,8 @@ public class BackgroundNotifier extends Service {
                 @Override
                 public void run() {
                     if(db.expiringItems()) {
+                        notifyBuilder.
+                                setContentText("You have some items expiring in the next week!");
                         NotificationManager mNotificationManager =
                                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         mNotificationManager.notify(0,notifyBuilder.build());
