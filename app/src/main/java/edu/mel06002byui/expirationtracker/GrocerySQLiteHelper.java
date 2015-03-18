@@ -85,7 +85,8 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
      *
      * @param grocery
      */
-    public void addGroceryToDatabase(Grocery grocery){
+    public long addGroceryToDatabase(Grocery grocery){
+        long idToReturn = 0;
         // log
         Log.d("addGroceryToDatabase", grocery.toString());
 
@@ -104,9 +105,10 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         values.put(KEY_EXPIRATION_DATE, grocery.dateAsString());
 
         // insert into table
-        db.insert(TABLE_GROCERIES, null, values);
+        idToReturn = db.insert(TABLE_GROCERIES, null, values);
 
         db.close();
+        return idToReturn;
     }
 
     public void checkItemIfExists(){}
