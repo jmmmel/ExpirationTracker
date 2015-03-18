@@ -127,9 +127,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getReadableDatabase();
 
             // build query
-            Cursor cursor = db.query(TABLE_GROCERIES, COLUMNS, " id = ?"
-                    , new String[]{String.valueOf(id)}, null, null, null, null);
-            Log.d("Cursor",cursor.toString());
+            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_GROCERIES + " WHERE id=" + id,null);
             // if a result is returned get the first result
             if (cursor != null)
                 cursor.moveToFirst();
@@ -139,8 +137,8 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
                 grocery.setId(Integer.parseInt(cursor.getString(0)));
                 grocery.setName(cursor.getString(1));
                 grocery.setQuantity(Integer.parseInt(cursor.getString(2)));
-                //grocery.setDateWithString(cursor.getString(3));
-                //Log.d(TAG_GROCERY_DB,cursor.getString(3));
+                grocery.setDateWithString(cursor.getString(3));
+                Log.d("getGrocerycursor 3",cursor.getString(3));
                 cursor.close();
             }
             Log.d("getGroceryByID ( "+ id +" )", grocery.toString());
