@@ -147,8 +147,10 @@ class Grocery implements Comparable<Grocery>{
      */
     @Override
     public String toString(){
-        return "ID: " + id +"\n" + name + "\nExpire Date: " + dateAsString()
-                + "\nDays Left: " + daysBetween(expireDate,Calendar.getInstance());
+        return name + "\nExpire Date: " + dateAsString()
+                + "\nDays Left: " + daysBetween(expireDate,Calendar.getInstance())
+                + "\nQuantity: " + quantity;
+
     }
 
     @Override

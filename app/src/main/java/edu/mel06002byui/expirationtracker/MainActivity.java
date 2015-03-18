@@ -72,9 +72,9 @@ public class MainActivity extends ActionBarActivity {
                 stopService(new Intent(this,BackgroundNotifier.class));
                 return true;
             case R.id.action_settings:
-            return true;
+                return true;
             default:
-            return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
 
 
@@ -102,7 +102,7 @@ public class MainActivity extends ActionBarActivity {
 
     public void addItem(View view){
         //Intent intent = new Intent(this, AddItem.class);
-       // startActivity(intent);
+        // startActivity(intent);
 
         final Dialog custom = new Dialog(MainActivity.this);
 
@@ -139,7 +139,7 @@ public class MainActivity extends ActionBarActivity {
 
     //public void finalAdd(View view){
 
-   // }
+    // }
 
     public void removeXml(View view){
         Intent intent = new Intent(this, removeXml.class);

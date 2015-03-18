@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/GroceryList"
-        android:layout_below="@+id/nameText" />
+        android:layout_below="@+id/addButton" />
 
     <Button
         android:layout_width="wrap_content"
@@ -35,32 +35,5 @@
         android:layout_toEndOf="@+id/addButton"
         android:layout_marginLeft="57dp"
         android:layout_marginStart="57dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        android:id="@+id/nameText"
-        android:layout_below="@+id/addButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Expires"
-        android:id="@+id/expireText"
-        android:layout_below="@+id/addButton"
-        android:layout_toRightOf="@+id/addButton"
-        android:layout_toEndOf="@+id/addButton" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Days Left"
-        android:id="@+id/daysLeftText"
-        android:layout_above="@+id/GroceryList"
-        android:layout_alignRight="@+id/removeButton"
-        android:layout_alignEnd="@+id/removeButton" />
 
 </RelativeLayout>
