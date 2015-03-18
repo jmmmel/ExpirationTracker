@@ -41,7 +41,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db.onCreate(db.getWritableDatabase());
+        //db.onCreate(db.getWritableDatabase());
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
@@ -177,13 +177,6 @@ public class MainActivity extends ActionBarActivity {
      */
     private void populateSetOnCreate(){
         allStoredItems.addAll(db.getAllGroceries());
-
-        Grocery tmpGrocery = new Grocery();
-        tmpGrocery.setQuantity(5);
-        tmpGrocery.setName("Peas");
-        tmpGrocery.setDateWithString("03/25/2015");
-        db.addGroceryToDatabase(tmpGrocery);
-        allStoredItems.add(db.getGroceryByID(1));
     }
 }
 
