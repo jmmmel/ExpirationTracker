@@ -82,8 +82,9 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param grocery
+     *  add a grocery to the Database
+     * @param grocery item to be added to the Database
+     * @return The id of the grocery item that was added to Database
      */
     public long addGroceryToDatabase(Grocery grocery){
         long idToReturn = 0;
@@ -103,10 +104,11 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
         //get expiration date and put it in values
         values.put(KEY_EXPIRATION_DATE, grocery.dateAsString());
-
+        Log.d("ValuesToBeInserted",values.toString());
+        Log.d("Inserting Table " + idToReturn,"*******************");
         // insert into table
         idToReturn = db.insert(TABLE_GROCERIES, null, values);
-
+        Log.d("Inserting Table " + idToReturn,"*******************");
         db.close();
         return idToReturn+1;
     }
@@ -116,10 +118,10 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     /**
      * gets a single grocery based of its id
      * @param id // id is the primary key
-     * @return grocery
+     * @return grocery that is in the Database
      */
     public Grocery getGroceryByID(int id){
-        Grocery grocery = null;
+        Grocery grocery = new Grocery();
         try {
             // get reference to readable DB
             SQLiteDatabase db = this.getReadableDatabase();
@@ -127,58 +129,30 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
             // build query
             Cursor cursor = db.query(TABLE_GROCERIES, COLUMNS, " id = ?"
                     , new String[]{String.valueOf(id)}, null, null, null, null);
+            Log.d("Cursor",cursor.toString());
             // if a result is returned get the first result
             if (cursor != null)
                 cursor.moveToFirst();
 
             if (cursor != null) {
-                grocery = new Grocery(Integer.parseInt(cursor.getString(0))
-                        , cursor.getString(1), Integer.parseInt(cursor.getString(2)));
-                grocery.setDateWithString(cursor.getString(3));
 
+                grocery.setId(Integer.parseInt(cursor.getString(0)));
+                grocery.setName(cursor.getString(1));
+                grocery.setQuantity(Integer.parseInt(cursor.getString(2)));
+                //grocery.setDateWithString(cursor.getString(3));
+                //Log.d(TAG_GROCERY_DB,cursor.getString(3));
                 cursor.close();
             }
             Log.d("getGroceryByID ( "+ id +" )", grocery.toString());
         } catch(NullPointerException e){
-            Log.e("getGrocery", grocery.toString());
+            Log.e("getGrocery", e.toString());
+            Log.d("getGroceryByID ( "+ id +" )", grocery.toString());
         }
         return grocery;
     }
 
     /**
-     * based on name it will create and return a grocery object
-     * @param name it will create a query based off on the name and search for the name
-     *             in the Database
-     * @return
-     */
-    public Grocery getGroceryByName(String name){
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // build cursor
-        Cursor cursor = db.query(TABLE_GROCERIES, COLUMNS, " name = ?"
-        , new String[]{ String.valueOf(name)}
-        ,null // group by
-        ,null // having
-        ,null // order by
-        ,null); // limit
-
-        Grocery grocery = new Grocery();
-        if (cursor != null){
-            cursor.moveToFirst();
-            Log.d("getGroceryByName()", (cursor.getString(0)));
-            grocery.setId(Integer.parseInt(cursor.getString(0)));
-            grocery.setName(cursor.getString(1));
-            grocery.setQuantity(Integer.parseInt(cursor.getString(2)));
-            //grocery.setDateWithString(cursor.getString(3));
-        }
-        Log.d("getGroceryByName(" +grocery.getID()+")", grocery.toString());
-        cursor.close();
-        return grocery;
-    }
-
-    /**
-     * will create a set of groceries that will be returned
+     * will create a tree set of groceries that will be returned
      * @return setOfGroceries
      */
     public Set<Grocery> getAllGroceries(){
@@ -205,16 +179,18 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
                 grocery.setName(cursor.getString(1));
                 grocery.setQuantity(Integer.parseInt(cursor.getString(2)));
                 grocery.setDateWithString(cursor.getString(3));
-
+                Log.d(TAG_GROCERY_DB,cursor.getString(3));
                 // add grocery object to set
+                Log.d("getAllGroceriesaddtoset", grocery.toString());
                 setOfGroceries.add(grocery);
+                Log.d("getAllGroceries set", setOfGroceries.toString());
             } while (cursor.moveToNext());
         }
 
         cursor.close();
 
         // log
-        Log.d("getAllGroceries", setOfGroceries.toString());
+        Log.d("getAllGroceries set", setOfGroceries.toString());
 
         return setOfGroceries;
 
@@ -222,8 +198,8 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
     /**
      *
-     * @param grocery
-     * @return
+     * @param grocery object that will be updated
+     * @return id of updated grocery
      */
     public int updateGroceryItem(Grocery grocery){
         // get reference to writable db
@@ -243,8 +219,8 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param grocery
+     * takes the grocery to be deleted
+     * @param grocery to be deleted
      */
     public void deleteItemFromDB(Grocery grocery){
 
@@ -259,14 +235,12 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         Log.d("deleteItem", grocery.toString());
     }
 
+    /**
+     *
+     * @return boolean if items are to expire return true
+     */
     public boolean expiringItems(){
         // return true is items are going to expire within the next week
         return false;
-    }
-
-    public void updateGroceryDB(Grocery grocery){
-        //get id from grocery to access the correct row in the DB
-        // change all data in row to the current grocery
-
     }
 }

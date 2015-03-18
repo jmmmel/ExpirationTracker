@@ -28,7 +28,7 @@ import java.util.TreeSet;
 
 public class MainActivity extends ActionBarActivity {
     private static final String TAG_MAIN_ACTIVITY= "MainActivity";
-    private Set<Grocery> allStoredItems = new TreeSet<>();;
+    private Set<Grocery> allStoredItems = new TreeSet<>();
     BackgroundNotifier monitor;
     private AlertDialog.Builder dialogBuilder;
     private GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
@@ -41,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        db.onCreate(db.getWritableDatabase());
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
@@ -89,7 +90,7 @@ public class MainActivity extends ActionBarActivity {
         // create an arrayList of groceries
         ArrayList<Grocery> tempArray = new ArrayList<>();
         tempArray.addAll(allStoredItems);
-        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<Grocery>(this,android.R.layout.simple_list_item_1, tempArray);
+        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, tempArray);
 
         // Set Adapter
         groceryList.setAdapter(arrayAdapter);
@@ -123,7 +124,7 @@ public class MainActivity extends ActionBarActivity {
                 int year = expDate.getYear();
 
                 Grocery grocery = new Grocery(name, quantityAsInt, month, Day, year);
-
+                Log.d("GroceryToBeAdded", grocery.toString());
                 addGroceryItemToSet(grocery);
 
                 displayToListView();
@@ -155,11 +156,12 @@ public class MainActivity extends ActionBarActivity {
         if(allStoredItems.contains(tempGrocery)){
             Grocery toUpdate = findInSet(tempGrocery);
             toUpdate.addQuantity(tempGrocery.getQuantity());
-            db.updateGroceryDB(toUpdate);
+            db.updateGroceryItem(toUpdate);
         }
         else{
-            int newID = db.addGroceryToDatabase(tempGrocery);
-            allStoredItems.add(db.getGroceryByID(newID));
+            long newID = db.addGroceryToDatabase(tempGrocery);
+
+            allStoredItems.add(db.getGroceryByID(((int) newID)));
         }
     }
     private Grocery findInSet(Grocery find){
@@ -171,35 +173,17 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * This will read in from the database on opening and store into our allStoredItems
+     * read in from the database on opening and store into allStoredItems
      */
     private void populateSetOnCreate(){
+        allStoredItems.addAll(db.getAllGroceries());
 
-/*
-        Grocery tempGrocery = new Grocery();
-        tempGrocery.setName("Peas");
-        tempGrocery.setExpireDate(new GregorianCalendar(2015, 3, 14));
-        tempGrocery.addValue(5);
-        //allStoredItems.add(tempGrocery);
-        db.addGroceryToDatabase(tempGrocery);
-        allStoredItems.add(db.getGroceryByName(tempGrocery.getName()));
-
-        tempGrocery = new Grocery();
-        tempGrocery.setName("Carrots");
-        tempGrocery.setExpireDate(new GregorianCalendar(2015,4,14));
-        tempGrocery.addValue(3);
-        //allStoredItems.add(tempGrocery);
-        db.addGroceryToDatabase(tempGrocery);
-        allStoredItems.add(db.getGroceryByName(tempGrocery.getName()));
-
-        tempGrocery = new Grocery();
-        tempGrocery.setName("Banana");
-        tempGrocery.setExpireDate(new GregorianCalendar(2015,3,16));
-        tempGrocery.addValue(7);
-        //allStoredItems.add(tempGrocery);
-        db.addGroceryToDatabase(tempGrocery);
-        allStoredItems.add(db.getGroceryByName(tempGrocery.getName()));
-*/
+        Grocery tmpGrocery = new Grocery();
+        tmpGrocery.setQuantity(5);
+        tmpGrocery.setName("Peas");
+        tmpGrocery.setDateWithString("03/25/2015");
+        db.addGroceryToDatabase(tmpGrocery);
+        allStoredItems.add(db.getGroceryByID(1));
     }
 }
 
