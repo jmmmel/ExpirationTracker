@@ -124,7 +124,7 @@ class Grocery implements Comparable<Grocery>{
      *
      * @param addNumber how much is added
      */
-    public void addValue(int addNumber) {
+    public void addQuantity(int addNumber) {
         quantity = quantity + addNumber;
     }
 
