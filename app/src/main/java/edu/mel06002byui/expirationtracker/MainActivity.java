@@ -64,13 +64,20 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        switch (item.getItemId()){
+            case R.id.action_start:
+                startService(new Intent(this,BackgroundNotifier.class));
+                return true;
+            case R.id.action_stop:
+                stopService(new Intent(this,BackgroundNotifier.class));
+                return true;
+            case R.id.action_settings:
             return true;
+            default:
+            return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
+
     }
 
 
