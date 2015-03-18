@@ -150,7 +150,7 @@ public class MainActivity extends ActionBarActivity {
         if(allStoredItems.contains(tempGrocery)){
             Grocery toUpdate = findInSet(tempGrocery);
             toUpdate.addQuantity(tempGrocery.getQuantity());
-            db.updateGroceryDB(toUpdate);
+            db.updateGroceryItem(toUpdate);
         }
         else{
             long newID = db.addGroceryToDatabase(tempGrocery);
