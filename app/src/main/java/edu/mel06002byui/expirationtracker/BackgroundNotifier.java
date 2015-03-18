@@ -1,6 +1,8 @@
 package edu.mel06002byui.expirationtracker;
 
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -32,6 +34,9 @@ public class BackgroundNotifier extends Service {
 
     @Override
     public void onCreate() {
+        notifyBuilder.setSmallIcon(R.drawable.ic_launcher);
+        notifyBuilder.setContentTitle("Expiring");
+        notifyBuilder.setContentText("You have some items expiring in the next week!");
         Toast.makeText(this, "Notificatons Started", Toast.LENGTH_LONG).show();
         // cancel if already existed
         if (mTimer != null) {
@@ -66,13 +71,19 @@ public class BackgroundNotifier extends Service {
 
                 @Override
                 public void run() {
-                    if(db.expiringItems())
+                    if(db.expiringItems()) {
 
-                        Toast.makeText(getApplicationContext(), "Items Are Expiring",
-                            Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(getApplicationContext(), "Items Are Not Expiring",
-                                Toast.LENGTH_SHORT).show();
+                        NotificationManager mNotificationManager =
+                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager.notify(0,notifyBuilder.build());
+
+                    }
+                    else{
+                        notifyBuilder.setContentText("No Expiring items");
+                        NotificationManager mNotificationManager =
+                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager.notify(0,notifyBuilder.build());
+                    }
                 }
 
             });
