@@ -42,8 +42,9 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param db // database object
+     * create a new database and create a table called groceries
+     * groceries table will contain name, quantity and expiration date
+     * @param db database object
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -54,24 +55,22 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
                 "quantity TEXT, " +
                 "expirationDate TEXT)";
 
+        // query to drop groceries table
         String DROP_TABLE ="DROP TABLE IF EXISTS " + TABLE_GROCERIES;
         db.execSQL(DROP_TABLE);
 
-        String Alter_table = "ALTER TABLE groceries ADD COLUMN expirationDate TEXT";
-
+        //Log
         Log.d("onCreate in DB", db.toString());
 
         // create groceries table
         db.execSQL(Create_Grocery_Table);
-        //db.execSQL("ALTER TABLE groceries ADD COLUMN expirationDate TEXT;");
-
     }
 
     /**
      *
-     * @param db
-     * @param oldVersion
-     * @param newVersion
+     * @param db // database that will be upgraded
+     * @param oldVersion current version of Database
+     * @param newVersion new version of database
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -165,7 +164,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
         //go through each row and build a grocery item and add
         // it to the set of books
-        Grocery grocery = null;
+        Grocery grocery;
         if (cursor.moveToFirst()){
 
             // loop through the cursor and create a grocery object and add it to
@@ -235,10 +234,12 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
     /**
      *
-     * @return boolean if items are to expire return true
+     * @return if items are to expire return true
      */
     public boolean expiringItems(){
         // return true is items are going to expire within the next week
+        // possible query to compare dates
+        // SELECT * FROM data WHERE date<=(2012/09/24) AND date>(2012/09/20)
         return false;
     }
 }
