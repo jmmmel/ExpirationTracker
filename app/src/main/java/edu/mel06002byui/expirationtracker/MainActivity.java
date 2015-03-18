@@ -2,7 +2,6 @@ package edu.mel06002byui.expirationtracker;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,13 +14,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -90,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
         // create an arrayList of groceries
         ArrayList<Grocery> tempArray = new ArrayList<>();
         tempArray.addAll(allStoredItems);
-        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, tempArray);
+        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<Grocery>(this,android.R.layout.simple_list_item_1, tempArray);
 
         // Set Adapter
         groceryList.setAdapter(arrayAdapter);
@@ -124,7 +118,7 @@ public class MainActivity extends ActionBarActivity {
                 int year = expDate.getYear();
 
                 Grocery grocery = new Grocery(name, quantityAsInt, month, Day, year);
-                Log.d("GroceryToBeAdded", grocery.toString());
+
                 addGroceryItemToSet(grocery);
 
                 displayToListView();
@@ -156,7 +150,7 @@ public class MainActivity extends ActionBarActivity {
         if(allStoredItems.contains(tempGrocery)){
             Grocery toUpdate = findInSet(tempGrocery);
             toUpdate.addQuantity(tempGrocery.getQuantity());
-            db.updateGroceryItem(toUpdate);
+            db.updateGroceryDB(toUpdate);
         }
         else{
             long newID = db.addGroceryToDatabase(tempGrocery);
@@ -173,7 +167,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * read in from the database on opening and store into allStoredItems
+     * This will read in from the database on opening and store into our allStoredItems
      */
     private void populateSetOnCreate(){
         allStoredItems.addAll(db.getAllGroceries());

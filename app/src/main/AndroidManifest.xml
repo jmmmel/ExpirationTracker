@@ -23,7 +23,6 @@
         <service
             android:enabled="true"
             android:name=".BackgroundNotifier"
-            android:exported="false"
             />
     </application>
 
