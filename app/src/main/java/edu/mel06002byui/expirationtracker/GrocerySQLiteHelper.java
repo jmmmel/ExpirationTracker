@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -54,10 +57,6 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
                 "name TEXT, " +
                 "quantity TEXT, " +
                 "expirationDate TEXT)";
-
-        // query to drop groceries table
-        String DROP_TABLE ="DROP TABLE IF EXISTS " + TABLE_GROCERIES;
-        db.execSQL(DROP_TABLE);
 
         //Log
         Log.d("onCreate in DB", db.toString());
@@ -199,6 +198,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
      * @return id of updated grocery
      */
     public int updateGroceryItem(Grocery grocery){
+        Log.d("Grocery to be updated", grocery.toString());
         // get reference to writable db
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -240,6 +240,49 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         // return true is items are going to expire within the next week
         // possible query to compare dates
         // SELECT * FROM data WHERE date<=(2012/09/24) AND date>(2012/09/20)
+/*
+        SQLiteDatabase db = this.getWritableDatabase();
+        Calendar today = new GregorianCalendar();
+        Calendar weekFromToday = new GregorianCalendar();
+
+        // add seven days
+        weekFromToday.add(weekFromToday.DATE, 7);
+
+        String queryForDate = "SELECT * FROM " + TABLE_GROCERIES + " WHERE " + KEY_EXPIRATION_DATE +
+                " <= " + today + " AND " + KEY_EXPIRATION_DATE + " > " + weekFromToday;
+        String query = "SELECT * FROM " + TABLE_GROCERIES;
+        Cursor cursor = db.rawQuery(query,null);
+*/
         return false;
+    }
+    // test code
+    public String dateAsString(Calendar calendar){
+        SimpleDateFormat formatter = new SimpleDateFormat();
+        formatter.applyPattern("yyyy-MM-dd");
+        return formatter.format(calendar.getTime());
+    }
+
+    /**
+     * Drops the groceries table and then recreates the groceries table so that it is empty
+     * @param db database that will be cleared
+     */
+    public void clearDatabase(SQLiteDatabase db){
+
+        // query to drop groceries table
+        String DROP_TABLE ="DROP TABLE IF EXISTS " + TABLE_GROCERIES;
+        db.execSQL(DROP_TABLE);
+
+        // SQL statement to create groceries table
+        String Create_Grocery_Table = "CREATE TABLE groceries ( " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT, " +
+                "quantity TEXT, " +
+                "expirationDate TEXT)";
+
+        //Log
+        Log.d("onCreate in DB", db.toString());
+
+        // create groceries table
+        db.execSQL(Create_Grocery_Table);
     }
 }

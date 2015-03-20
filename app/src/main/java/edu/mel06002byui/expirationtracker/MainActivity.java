@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
 
 
 
-        //db.onCreate(db.getWritableDatabase());
+
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
