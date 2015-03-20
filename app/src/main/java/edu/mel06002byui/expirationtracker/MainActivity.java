@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -65,12 +66,27 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId())
         {
             case R.id.id_delete:
-
-
+                int selectedPostion = ((AdapterView.AdapterContextMenuInfo)info).position;
+                Iterator<Grocery> iterator = allStoredItems.iterator();
+                Grocery deleteThisGrocery = null;
+                for(int i = 0; i < selectedPostion + 1; i++)
+                    deleteThisGrocery = iterator.next();
+                if(null == deleteThisGrocery) {
+                    Log.d("ContectMenu", "Didn't find a selected postition");
+                    return true;
+                }
+                Log.d("ContextMenu", deleteThisGrocery.toString());
+                allStoredItems.remove(deleteThisGrocery);
+                db.deleteItemFromDB(deleteThisGrocery);
+                displayToListView();
+                Log.d("ContextMenu", "Position: " + selectedPostion);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
         }
 
 
-        return super.onContextItemSelected(item);
+
     }
 
     /**
