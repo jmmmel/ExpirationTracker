@@ -134,9 +134,6 @@ public class MainActivity extends ActionBarActivity {
             default:
                 return super.onContextItemSelected(item);
         }
-
-
-
     }
 
     /**

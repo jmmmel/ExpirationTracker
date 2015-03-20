@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Set;
@@ -238,28 +239,57 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
      */
     public boolean expiringItems(){
         // return true is items are going to expire within the next week
-        // possible query to compare dates
-        // SELECT * FROM data WHERE date<=(2012/09/24) AND date>(2012/09/20)
-/*
-        SQLiteDatabase db = this.getWritableDatabase();
+
         Calendar today = new GregorianCalendar();
         Calendar weekFromToday = new GregorianCalendar();
-
         // add seven days
         weekFromToday.add(weekFromToday.DATE, 7);
 
-        String queryForDate = "SELECT * FROM " + TABLE_GROCERIES + " WHERE " + KEY_EXPIRATION_DATE +
-                " <= " + today + " AND " + KEY_EXPIRATION_DATE + " > " + weekFromToday;
-        String query = "SELECT * FROM " + TABLE_GROCERIES;
-        Cursor cursor = db.rawQuery(query,null);
-*/
+        // get set of Groceries from Database
+        Set<Grocery> grocerySet = new TreeSet<>();
+        grocerySet = getAllGroceries();
+
+        // move set of groceries into an arraylist
+        ArrayList<Grocery> groceryArray = new ArrayList<>();
+        groceryArray.addAll(grocerySet);
+
+        // calendar object will be set to a date from the database
+        Calendar tempCalendar = new GregorianCalendar();
+        Log.d("Size of Array","" + groceryArray.size());
+
+        // walk through the groceryArray and return true if there are groceries that are going to
+        // expire
+        for (int i = 0; i < groceryArray.size(); i++) {
+            String tempDate = groceryArray.get(i).dateAsString();
+            tempCalendar = setDateWithString(tempDate);
+
+            Log.d("tempCalendar", "" + tempCalendar.getTimeInMillis());
+            Log.d("today", "" + today.getTimeInMillis());
+            Log.d("weekFromToday", "" + weekFromToday.getTimeInMillis());
+            if ((tempCalendar.getTimeInMillis() >= today.getTimeInMillis())
+                    && (tempCalendar.getTimeInMillis() < weekFromToday.getTimeInMillis())){
+
+                return true;
+            }
+        }
+
         return false;
     }
-    // test code
-    public String dateAsString(Calendar calendar){
-        SimpleDateFormat formatter = new SimpleDateFormat();
-        formatter.applyPattern("yyyy-MM-dd");
-        return formatter.format(calendar.getTime());
+
+    /**
+     * Used to set the date with a string
+     * @param newDate string in format MM/dd/yyyy
+     */
+    public Calendar setDateWithString(String newDate){
+        String[] tokens = newDate.split("-");
+        if(tokens.length != 3) {
+            Log.d("SetDateWithString", "Incorrect Format");
+            return null;
+        }
+        int year = Integer.parseInt(tokens[0]);
+        int month = Integer.parseInt(tokens[1])-1;
+        int day = Integer.parseInt(tokens[2]);
+        return new GregorianCalendar(year,month,day);
     }
 
     /**
