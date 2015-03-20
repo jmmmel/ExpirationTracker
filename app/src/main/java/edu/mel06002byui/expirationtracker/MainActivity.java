@@ -2,13 +2,17 @@ package edu.mel06002byui.expirationtracker;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -26,6 +30,8 @@ public class MainActivity extends ActionBarActivity {
     BackgroundNotifier monitor;
     private AlertDialog.Builder dialogBuilder;
     private GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
+    ListView lv;
+
     /**
      *
      * @param savedInstanceState
@@ -34,11 +40,37 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+         lv = (ListView)findViewById(R.id.GroceryList);
+        registerForContextMenu(lv);
+
+
 
 
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
+    }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuinfo){
+            super.onCreateContextMenu(menu, v, menuinfo);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menulong, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+
+        switch (item.getItemId())
+        {
+            case R.id.id_delete:
+
+
+        }
+
+
+        return super.onContextItemSelected(item);
     }
 
     /**
@@ -137,9 +169,12 @@ public class MainActivity extends ActionBarActivity {
         custom.show();
     }
 
-    //public void finalAdd(View view){
+    public void menuDialog(View view){
 
-    // }
+
+    }
+
+
 
     public void removeXml(View view){
         Intent intent = new Intent(this, removeXml.class);

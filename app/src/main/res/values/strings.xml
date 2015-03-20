@@ -8,4 +8,7 @@
     <string name="title_activity_add_item">AddItem</string>
     <string name="title_activity_remove_xml">removeXml</string>
 
+    <string name="title_delete">Delete</string>
+    <string name="title_edit">Edit</string>
+
 </resources>
