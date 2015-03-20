@@ -59,27 +59,77 @@ public class MainActivity extends ActionBarActivity {
         menuInflater.inflate(R.menu.menulong, menu);
     }
 
+    //Buttons needed for dialog box
+    private Button saveEdit;
+    private Button cancelEdit;
+    private Grocery selectedGrocery;
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-
+        int selectedPostion = ((AdapterView.AdapterContextMenuInfo)info).position;
+        Iterator<Grocery> iterator = allStoredItems.iterator();
+        selectedGrocery = null;
+        for(int i = 0; i < selectedPostion + 1; i++)
+            selectedGrocery = iterator.next();
+        if(null == selectedGrocery) {
+            Log.d("ContectMenu", "Didn't find a selected postition");
+            return true;
+        }
+        Log.d("ContextMenu", selectedGrocery.toString());
         switch (item.getItemId())
         {
             case R.id.id_delete:
-                int selectedPostion = ((AdapterView.AdapterContextMenuInfo)info).position;
-                Iterator<Grocery> iterator = allStoredItems.iterator();
-                Grocery deleteThisGrocery = null;
-                for(int i = 0; i < selectedPostion + 1; i++)
-                    deleteThisGrocery = iterator.next();
-                if(null == deleteThisGrocery) {
-                    Log.d("ContectMenu", "Didn't find a selected postition");
-                    return true;
-                }
-                Log.d("ContextMenu", deleteThisGrocery.toString());
-                allStoredItems.remove(deleteThisGrocery);
-                db.deleteItemFromDB(deleteThisGrocery);
+                allStoredItems.remove(selectedGrocery);
+                db.deleteItemFromDB(selectedGrocery);
                 displayToListView();
                 Log.d("ContextMenu", "Position: " + selectedPostion);
+                return true;
+
+            case R.id.id_edit:
+                final Dialog custom = new Dialog(MainActivity.this);
+
+                custom.setContentView(R.layout.activity_edit_grocery);
+                custom.setTitle("Edit Item");
+                final EditText nameEdit = (EditText)custom.findViewById(R.id.editGroceryTextName);
+                nameEdit.setHint(selectedGrocery.getName());
+                final EditText quantityEdit = (EditText)custom.findViewById(R.id.editGroceryTextQuantity);
+                quantityEdit.setText("" + selectedGrocery.getQuantity());
+                final DatePicker editDate = (DatePicker) custom.findViewById(R.id.editDatePicker);
+                String date = selectedGrocery.dateAsString();
+                String[] dateParse = date.split("-");
+                int year = Integer.parseInt(dateParse[0]);
+                int day = Integer.parseInt(dateParse[2]);
+                int month = Integer.parseInt(dateParse[1])-1;
+                editDate.updateDate(year,month,day);
+                Log.d("ContextMenu","" + editDate.getYear() + "-" + editDate.getMonth()
+                        + "-" + editDate.getDayOfMonth());
+                saveEdit = (Button)custom.findViewById(R.id.editSaveButton);
+                cancelEdit = (Button)custom.findViewById(R.id.editCancelButton);
+                saveEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectedGrocery.setName(nameEdit.getText().toString());
+                        selectedGrocery
+                                .setQuantity(Integer.parseInt(quantityEdit.getText().toString()));
+                        String newDate = "";
+                        newDate = "" + editDate.getYear() + "-" + (editDate.getMonth()+1)
+                            + "-" + editDate.getDayOfMonth();
+                        Log.d("ContextMenu", newDate + " Is the Date");
+                        selectedGrocery.setDateWithString(newDate);
+                        db.updateGroceryItem(selectedGrocery);
+
+                        displayToListView();
+                        custom.cancel();
+                    }
+                });
+                cancelEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        custom.cancel();
+                    }
+                });
+                custom.show();
                 return true;
             default:
                 return super.onContextItemSelected(item);
