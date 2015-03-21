@@ -164,12 +164,22 @@ class Grocery implements Comparable<Grocery>{
         return expireDate.hashCode()*allCapsName.hashCode();
     }
 
+    /**
+     * Used to get the days to expiration
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     private int daysBetween(Calendar startDate, Calendar endDate) {
         long end = endDate.getTimeInMillis();
         long start = startDate.getTimeInMillis();
         return (int)TimeUnit.MILLISECONDS.toDays(start-end);
     }
 
+    /**
+     * Gives the date as a string for display or storage
+     * @return string representing date in format YYYY-MM-DD
+     */
     public String dateAsString(){
         SimpleDateFormat formatter = new SimpleDateFormat();
         formatter.applyPattern("yyyy-MM-dd");
@@ -178,7 +188,7 @@ class Grocery implements Comparable<Grocery>{
 
     /**
      * Used to set the date with a string
-     * @param newDate string in format MM/dd/yyyy
+     * @param newDate string in format YYYY-MM-DD
      */
     public void setDateWithString(String newDate){
         String[] tokens = newDate.split("-");
@@ -192,6 +202,10 @@ class Grocery implements Comparable<Grocery>{
         expireDate = new GregorianCalendar(year,month,day);
     }
 
+    /**
+     * Gives a calendar object with no hours minutes and seconds of today
+     * @return
+     */
     private Calendar todayTrimmed() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);

@@ -92,7 +92,7 @@ public class MainActivity extends ActionBarActivity {
                 custom.setContentView(R.layout.activity_edit_grocery);
                 custom.setTitle("Edit Item");
                 final EditText nameEdit = (EditText)custom.findViewById(R.id.editGroceryTextName);
-                nameEdit.setHint(selectedGrocery.getName());
+                nameEdit.setText(selectedGrocery.getName());
                 final EditText quantityEdit = (EditText)custom.findViewById(R.id.editGroceryTextQuantity);
                 quantityEdit.setText("" + selectedGrocery.getQuantity());
                 final DatePicker editDate = (DatePicker) custom.findViewById(R.id.editDatePicker);
