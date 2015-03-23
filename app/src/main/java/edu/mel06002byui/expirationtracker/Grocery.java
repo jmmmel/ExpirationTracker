@@ -137,7 +137,10 @@ class Grocery implements Comparable<Grocery>{
      */
     @Override
     public int compareTo(Grocery another) {
-        return this.getExpireDate().compareTo(another.getExpireDate());
+        int compare = this.getExpireDate().compareTo(another.getExpireDate());
+        if(compare == 0)
+            compare = this.getName().compareTo(another.getName());
+        return compare;
     }
 
     /**
@@ -155,13 +158,18 @@ class Grocery implements Comparable<Grocery>{
 
     @Override
     public boolean equals(Object compGrocery){
-        return compGrocery.hashCode() == this.hashCode();
+        Grocery compareGrocery = (Grocery)compGrocery;
+        boolean isSame = false;
+        if(compareGrocery.getName().equals(this.getName())
+                && compareGrocery.dateAsString().equals(this.dateAsString()))
+            isSame = true;
+        return isSame;
     }
 
     @Override
     public int hashCode(){
         String allCapsName = name.toUpperCase();
-        return expireDate.hashCode()*allCapsName.hashCode();
+        return expireDate.hashCode()*allCapsName.hashCode() + id;
     }
 
     /**
