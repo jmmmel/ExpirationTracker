@@ -76,19 +76,13 @@ public class BackgroundNotifier extends Service {
                 public void run() {
                     if(db.expiringItems()) {
                         notifyBuilder.
-                                setContentText("You have some items expiring in the next week!");
+                                setContentText("Some items expiring in a week!");
                         NotificationManager mNotificationManager =
                                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         mNotificationManager.notify(0,notifyBuilder.build());
 
                     }
-                    else{
-
-                        notifyBuilder.setContentText("No Expiring items");
-                        NotificationManager mNotificationManager =
-                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                        mNotificationManager.notify(0,notifyBuilder.build());
-                    }
+                    
                 }
 
             });
