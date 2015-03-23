@@ -39,7 +39,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * default constructor
-     * @param context
+     * @param context default context
      */
     public GrocerySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -111,8 +111,6 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         db.close();
         return idToReturn;
     }
-
-    public void checkItemIfExists(){}
 
     /**
      * gets a single grocery based of its id
