@@ -308,7 +308,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
                 "expirationDate TEXT)";
 
         //Log
-        Log.d("onCreate in DB", db.toString());
+        Log.d("Clear  of items", db.toString());
 
         // create groceries table
         db.execSQL(Create_Grocery_Table);
