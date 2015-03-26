@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * Created by James on 2/26/2015.
  */
 public class BackgroundNotifier extends Service {
-
+    private static boolean isRunning;
     public static final long NOTIFY_INTERVAL
             = TimeUnit.SECONDS.convert(7, TimeUnit.DAYS) * 1000; // 7 days
     private GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
@@ -37,10 +37,10 @@ public class BackgroundNotifier extends Service {
 
     @Override
     public void onCreate() {
-
+        isRunning = true;
         String notifTitle = "Service";
         String notifMessage = "Running";
-
+        Toast.makeText(this, "Notificatons Started", Toast.LENGTH_LONG).show();
         final Intent notificationIntent = new Intent(this,   MainActivity.class);
         notificationIntent.putExtra("extra", "value");
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -68,6 +68,7 @@ public class BackgroundNotifier extends Service {
 
     @Override
     public void onDestroy() {
+        isRunning = false;
         mTimer.cancel();
         Toast.makeText(this, "Notificatons Stopped", Toast.LENGTH_LONG).show();
     }
@@ -77,6 +78,8 @@ public class BackgroundNotifier extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    public static boolean getStatus(){return isRunning;}
 
     class TimeDisplayTimerTask extends TimerTask {
 

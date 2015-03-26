@@ -10,5 +10,5 @@
         android:title="Days to Notify"
         android:summary="Which days the expiration date list is checked."
         android:entries="@array/days_in_week"
-        android:key="expirationKey"/>
+        android:key="days_check"/>
 </PreferenceScreen>
