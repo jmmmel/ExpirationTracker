@@ -10,5 +10,7 @@
 
     <string name="title_delete">Delete</string>
     <string name="title_edit">Edit</string>
+    <string name="notify_enable">Recieve Notifications</string>
+    <string name="notify_enable_summ">Do you want to get notifications?</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package edu.mel06002byui.expirationtracker;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -37,8 +38,20 @@ public class BackgroundNotifier extends Service {
     @Override
     public void onCreate() {
 
-        notifyBuilder.setSmallIcon(R.drawable.warning_image);
+        String notifTitle = "Service";
+        String notifMessage = "Running";
 
+        final Intent notificationIntent = new Intent(this,   MainActivity.class);
+        notificationIntent.putExtra("extra", "value");
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        notificationIntent.setAction("android.intent.action.MAIN");
+        notificationIntent.addCategory("android.intent.category.LAUNCHER");
+
+        final PendingIntent contentIntent = PendingIntent
+                .getActivity(this, 0, notificationIntent,0);
+        notifyBuilder.setSmallIcon(R.drawable.warning_image);
+        notifyBuilder.setContentIntent(contentIntent);
         notifyBuilder.setContentTitle("Expiring");
         Toast.makeText(this, "Notificatons Started", Toast.LENGTH_LONG).show();
         // cancel if already existed
@@ -82,7 +95,7 @@ public class BackgroundNotifier extends Service {
                         mNotificationManager.notify(0,notifyBuilder.build());
 
                     }
-                    
+
                 }
 
             });
