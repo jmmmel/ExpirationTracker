@@ -2,7 +2,6 @@ package edu.mel06002byui.expirationtracker;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -43,10 +42,6 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
          lv = (ListView)findViewById(R.id.GroceryList);
         registerForContextMenu(lv);
-
-
-
-
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
@@ -144,7 +139,9 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        MenuItem toggler = menu.findItem(R.id.toggle_notify);
+        toggler.setChecked(BackgroundNotifier.getStatus());
         return true;
     }
 
@@ -160,11 +157,22 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (item.getItemId()){
-            case R.id.action_start:
-                startService(new Intent(this,BackgroundNotifier.class));
+            case R.id.toggle_notify:
+
+                Log.d("OptionsMenu","Before Check");
+                if(item.isChecked()){
+                    Log.d("OptionsMenu","Before Set Check");
+                    item.setChecked(false);
+                    Log.d("OptionsMenu","After Set Check");
+                    stopService(new Intent(this,BackgroundNotifier.class));
+                }
+                else{
+                    item.setChecked(true);
+                    startService(new Intent(this,BackgroundNotifier.class));
+                }
+                Log.d("OptionsMenu","After Check");
                 return true;
             case R.id.action_stop:
-                stopService(new Intent(this,BackgroundNotifier.class));
                 return true;
             case R.id.action_settings:
                 return true;

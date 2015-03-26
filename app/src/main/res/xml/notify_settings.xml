@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="notify_enable"
+        android:title="@string/notify_enable"
+        android:summary="@string/notify_enable_summ"
+        android:defaultValue="true"/>
+    <MultiSelectListPreference
+        android:defaultValue="@array/day_pref_default"
+        android:title="Days to Notify"
+        android:summary="Which days the expiration date list is checked."
+        android:entries="@array/days_in_week"
+        android:key="days_check"/>
+</PreferenceScreen>

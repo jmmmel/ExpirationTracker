@@ -243,13 +243,9 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         // add seven days
         weekFromToday.add(weekFromToday.DATE, 7);
 
-        // get set of Groceries from Database
-        Set<Grocery> grocerySet = new TreeSet<>();
-        grocerySet = getAllGroceries();
-
         // move set of groceries into an arraylist
         ArrayList<Grocery> groceryArray = new ArrayList<>();
-        groceryArray.addAll(grocerySet);
+        groceryArray.addAll(getAllGroceries());
 
         // calendar object will be set to a date from the database
         Calendar tempCalendar = new GregorianCalendar();

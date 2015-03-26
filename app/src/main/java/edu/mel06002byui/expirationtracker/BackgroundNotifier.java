@@ -1,6 +1,7 @@
 package edu.mel06002byui.expirationtracker;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * Created by James on 2/26/2015.
  */
 public class BackgroundNotifier extends Service {
-
+    private static boolean isRunning;
     public static final long NOTIFY_INTERVAL
             = TimeUnit.SECONDS.convert(7, TimeUnit.DAYS) * 1000; // 7 days
     private GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
@@ -36,9 +37,21 @@ public class BackgroundNotifier extends Service {
 
     @Override
     public void onCreate() {
+        isRunning = true;
+        String notifTitle = "Service";
+        String notifMessage = "Running";
+        Toast.makeText(this, "Notificatons Started", Toast.LENGTH_LONG).show();
+        final Intent notificationIntent = new Intent(this,   MainActivity.class);
+        notificationIntent.putExtra("extra", "value");
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        notificationIntent.setAction("android.intent.action.MAIN");
+        notificationIntent.addCategory("android.intent.category.LAUNCHER");
 
+        final PendingIntent contentIntent = PendingIntent
+                .getActivity(this, 0, notificationIntent,0);
         notifyBuilder.setSmallIcon(R.drawable.warning_image);
-
+        notifyBuilder.setContentIntent(contentIntent);
         notifyBuilder.setContentTitle("Expiring");
         Toast.makeText(this, "Notificatons Started", Toast.LENGTH_LONG).show();
         // cancel if already existed
@@ -55,6 +68,7 @@ public class BackgroundNotifier extends Service {
 
     @Override
     public void onDestroy() {
+        isRunning = false;
         mTimer.cancel();
         Toast.makeText(this, "Notificatons Stopped", Toast.LENGTH_LONG).show();
     }
@@ -64,6 +78,8 @@ public class BackgroundNotifier extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    public static boolean getStatus(){return isRunning;}
 
     class TimeDisplayTimerTask extends TimerTask {
 
@@ -76,19 +92,13 @@ public class BackgroundNotifier extends Service {
                 public void run() {
                     if(db.expiringItems()) {
                         notifyBuilder.
-                                setContentText("You have some items expiring in the next week!");
+                                setContentText("Some items expiring in a week!");
                         NotificationManager mNotificationManager =
                                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         mNotificationManager.notify(0,notifyBuilder.build());
 
                     }
-                    else{
 
-                        notifyBuilder.setContentText("No Expiring items");
-                        NotificationManager mNotificationManager =
-                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                        mNotificationManager.notify(0,notifyBuilder.build());
-                    }
                 }
 
             });
