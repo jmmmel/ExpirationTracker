@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -202,7 +203,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     Button addButton;
-
+    private Button scanButton;
+    private String nameFromScanner;
     public void addItem(View view){
         //Intent intent = new Intent(this, AddItem.class);
         // startActivity(intent);
@@ -236,10 +238,40 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        scanButton = (Button) custom.findViewById(R.id.Scanner);
+        scanButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+            IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
+            scanIntegrator.initiateScan();
+            }
+        });
 
         custom.show();
     }
 
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    //retrieve scan result
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
+                intent);
+
+        if(scanningResult != null){
+            String scanContent = scanningResult.getContents();
+
+            Log.i("Scan Results", scanContent.toString());
+            String scanFormat = scanningResult.getFormatName();
+            Log.i("Scan Format", scanContent.toString());
+            Toast results = Toast.makeText(getApplicationContext(), "" + scanFormat, Toast.LENGTH_LONG);
+            results.show();
+        }
+        else{
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "No scan data received!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
     public void menuDialog(View view){
 
 
