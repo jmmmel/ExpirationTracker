@@ -13,7 +13,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -28,18 +30,19 @@ public class BackgroundNotifier extends Service {
     private GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
     private NotificationCompat.Builder notifyBuilder
             = new NotificationCompat.Builder(this);
-
+    SharedPreferences settings;
+    SharedPreferences.Editor editSettings;
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
     // timer handling
-    private Timer mTimer = null;
+    private static Timer mTimer = null;
 
     private static final String TAG = "BackgroundNotifier";
 
     @Override
     public void onCreate() {
-        SharedPreferences settings = getSharedPreferences("notifySettings",MODE_PRIVATE);
-        SharedPreferences.Editor editSettings = settings.edit();
+        settings = getSharedPreferences("notifySettings",MODE_PRIVATE);
+        editSettings = settings.edit();
         editSettings.putBoolean("firstStart",false);
         editSettings.commit();
         isRunning = true;
@@ -66,8 +69,14 @@ public class BackgroundNotifier extends Service {
             // recreate new
             mTimer = new Timer();
         }
+
+        Calendar c = Calendar.getInstance();
+        //c.set(c.get(Calendar.YEAR),c.get(Calendar.MONTH));
+        Date today = c.getTime();
+
+
         // schedule task
-        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0, NOTIFY_INTERVAL);
+        //mTimer.schedule(new TimeDisplayTimerTask(),);
 
     }
 
@@ -85,6 +94,9 @@ public class BackgroundNotifier extends Service {
     }
 
     public static boolean getStatus(){return isRunning;}
+    public static void updateTime(Date time){
+        mTimer.cancel();
+    }
 
     class TimeDisplayTimerTask extends TimerTask {
 

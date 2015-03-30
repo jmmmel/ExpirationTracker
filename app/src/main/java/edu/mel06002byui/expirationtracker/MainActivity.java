@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import java.util.TreeSet;
 public class MainActivity extends ActionBarActivity {
     private SharedPreferences settings;
     private SharedPreferences.Editor prefEditor;
+    private static Context myApp;
     private static final String TAG_MAIN_ACTIVITY= "MainActivity";
     private Set<Grocery> allStoredItems = new TreeSet<>();
     BackgroundNotifier monitor;
@@ -47,6 +49,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myApp = this;
         settings = getSharedPreferences("notifySettings",MODE_PRIVATE);
         prefEditor = settings.edit();
         setContentView(R.layout.activity_main);
@@ -297,7 +300,7 @@ public class MainActivity extends ActionBarActivity {
         return find;
     }
 
-    public class TimePickerFragment extends DialogFragment
+    public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
         @Override
@@ -316,8 +319,12 @@ public class MainActivity extends ActionBarActivity {
             // Do something with the time chosen by the user
             Log.d("OnTimeSet", "Hour: " + hourOfDay);
             Log.d("OnTimeSet", "Minute: " + minute);
-            prefEditor.putInt("notify_hour",hourOfDay);
-            prefEditor.putInt("notify_minute",minute);
+            SharedPreferences settings
+                    = myApp.getSharedPreferences("notifySettings",MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("notify_hour",hourOfDay);
+            editor.putInt("notify_minute",minute);
+            editor.commit();
         }
     }
 
