@@ -23,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -353,7 +354,7 @@ public class MainActivity extends ActionBarActivity {
             SharedPreferences settings
                     = myApp.getSharedPreferences("notifySettings",MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putInt("notify_hour",hourOfDay);
+            editor.putInt("notify_hour", hourOfDay);
             editor.putInt("notify_minute",minute);
             editor.commit();
         }
