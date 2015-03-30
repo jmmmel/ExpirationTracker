@@ -2,9 +2,14 @@ package edu.mel06002byui.expirationtracker;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -17,15 +22,19 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TimePicker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
 
 public class MainActivity extends ActionBarActivity {
+    private SharedPreferences settings;
+    private SharedPreferences.Editor prefEditor;
+    private static Context myApp;
     private static final String TAG_MAIN_ACTIVITY= "MainActivity";
     private Set<Grocery> allStoredItems = new TreeSet<>();
     BackgroundNotifier monitor;
@@ -40,12 +49,18 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myApp = this;
+        settings = getSharedPreferences("notifySettings",MODE_PRIVATE);
+        prefEditor = settings.edit();
         setContentView(R.layout.activity_main);
          lv = (ListView)findViewById(R.id.GroceryList);
         registerForContextMenu(lv);
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
+        if(settings.getBoolean("firstStart", true))
+            startService(new Intent(this,BackgroundNotifier.class));
+
     }
 
         @Override
@@ -142,7 +157,9 @@ public class MainActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_settings, menu);
         MenuItem toggler = menu.findItem(R.id.toggle_notify);
-        toggler.setChecked(BackgroundNotifier.getStatus());
+        boolean backgroundServiceStarted = settings.getBoolean("notifyStatus", true);
+        toggler.setChecked(backgroundServiceStarted);
+
         return true;
     }
 
@@ -160,22 +177,25 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()){
             case R.id.toggle_notify:
 
-                Log.d("OptionsMenu","Before Check");
                 if(item.isChecked()){
-                    Log.d("OptionsMenu","Before Set Check");
+
                     item.setChecked(false);
-                    Log.d("OptionsMenu","After Set Check");
+                    prefEditor.putBoolean("notifyStatus", false);
                     stopService(new Intent(this,BackgroundNotifier.class));
+
                 }
                 else{
                     item.setChecked(true);
+                    prefEditor.putBoolean("notifyStatus", true);
                     startService(new Intent(this,BackgroundNotifier.class));
                 }
+                prefEditor.commit();
                 Log.d("OptionsMenu","After Check");
                 return true;
-            case R.id.action_stop:
-                return true;
-            case R.id.action_settings:
+            case R.id.time_status:
+                DialogFragment newFragment = new TimePickerFragment();
+                newFragment.show(getFragmentManager(),"timePicker");
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -309,6 +329,34 @@ public class MainActivity extends ActionBarActivity {
                 return check;
         }
         return find;
+    }
+
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // Do something with the time chosen by the user
+            Log.d("OnTimeSet", "Hour: " + hourOfDay);
+            Log.d("OnTimeSet", "Minute: " + minute);
+            SharedPreferences settings
+                    = myApp.getSharedPreferences("notifySettings",MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("notify_hour",hourOfDay);
+            editor.putInt("notify_minute",minute);
+            editor.commit();
+        }
     }
 
     /**
