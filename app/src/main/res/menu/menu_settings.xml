@@ -11,4 +11,8 @@
                 android:checked="true"/>
         </menu>
     </item>
+    <item
+        android:id="@+id/time_status"
+        android:title="Notify Time">
+    </item>
 </menu>

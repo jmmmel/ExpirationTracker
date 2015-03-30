@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -37,10 +38,14 @@ public class BackgroundNotifier extends Service {
 
     @Override
     public void onCreate() {
+        SharedPreferences settings = getSharedPreferences("notifySettings",MODE_PRIVATE);
+        SharedPreferences.Editor editSettings = settings.edit();
+        editSettings.putBoolean("firstStart",false);
+        editSettings.commit();
         isRunning = true;
         String notifTitle = "Service";
         String notifMessage = "Running";
-        Toast.makeText(this, "Notificatons Started", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Notificatons Started", Toast.LENGTH_LONG).show();
         final Intent notificationIntent = new Intent(this,   MainActivity.class);
         notificationIntent.putExtra("extra", "value");
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -70,7 +75,7 @@ public class BackgroundNotifier extends Service {
     public void onDestroy() {
         isRunning = false;
         mTimer.cancel();
-        Toast.makeText(this, "Notificatons Stopped", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Notificatons Stopped", Toast.LENGTH_LONG).show();
     }
 
 
