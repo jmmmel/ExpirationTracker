@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -24,7 +25,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -224,7 +232,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     Button addButton;
-
+    private Button scanButton;
     public void addItem(View view){
         //Intent intent = new Intent(this, AddItem.class);
         // startActivity(intent);
@@ -258,8 +266,120 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        scanButton = (Button) custom.findViewById(R.id.Scanner);
+        scanButton.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
+                scanIntegrator.initiateScan();
+
+            }
+        });
+
+        Log.i("ResultForItem", resultsForItem);
         custom.show();
+    }
+
+    /**
+     *
+     * @param requestCode default value
+     * @param resultCode default value
+     * @param intent default value
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    //retrieve scan result
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
+                intent);
+
+        if(scanningResult != null){
+            try {
+                String scanContent = scanningResult.getContents();
+
+                Log.i("Scan Results", scanContent);
+                String scanFormat = scanningResult.getFormatName();
+                Log.i("Scan Format", scanFormat);
+                Toast results = Toast.makeText(getApplicationContext(), "Scan Complete: " + scanContent, Toast.LENGTH_LONG);
+                results.show();
+                HTMLParser(scanContent);
+
+            } catch (Exception e){
+                Log.i("Scanner Exception", e.toString() );
+                Toast results = Toast.makeText(getApplicationContext(), " Scan Canceled ", Toast.LENGTH_LONG);
+                results.show();
+            }
+        }
+        else{
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "No scan data received!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+
+    // holds the result of the information for the item, dependent of the UPC of said item
+    public String resultsForItem = "No Data Found";
+    /**
+     * The HTMLParser will parse an HTML doc to extract the description and size/weight of the item
+     * tha is being searched
+     * @param scanResults results from the bar code scanner
+     * @return
+     */
+    public String HTMLParser(final String scanResults) {
+
+        Thread thread = new Thread(new Runnable(){
+
+            @Override
+            public void run() {
+                String itemInfo = "No data found";
+                Document HTML;
+                try {
+                    HTML = Jsoup.connect("http://www.upcdatabase.com/item/" + scanResults)
+                            .maxBodySize(0).timeout(600000).get();
+                    Elements content = HTML.body().getElementsByClass("data");
+
+                    if(!content.isEmpty()){
+                        for (int i = 0; i < content.size(); i++){
+                            Log.i("CONTENT " + i, content.get(i).text());
+                        }
+
+                        // if true then there is an item in website database
+                        if(content.get(0).text().contains("UPC-A EAN/UCC-13 Description")) {
+
+                            // various steps to split the string to get the item information
+                            String[] parsedString = content.get(0).text().split("UPC-A EAN/UCC-13 Description");
+                            Log.i("parsedString", parsedString[0]);
+                            Log.i("parsedString", parsedString[1]);
+
+                            String[] parsedString2 = parsedString[1].split("Size/Weight");
+                            Log.i("ParsedString 2", parsedString2[0]);
+                            Log.i("ParsedString 2", parsedString2[1]);
+
+                            String[] parsedString3 = parsedString2[1].split("Issuing Country");
+                            Log.i("ParsedString 3", parsedString3[0]);
+                            Log.i("ParsedString 3", parsedString3[1]);
+                            // assign itemInfo the information that was found
+                            itemInfo = parsedString2[0] + parsedString3[0];
+                            resultsForItem = itemInfo;
+                            Log.i("results in HTMLParser", resultsForItem);
+                            // this code crashes the app
+                            EditText myTextBox = (EditText) findViewById(R.id.nameText);
+                            //myTextBox.setText(resultsForItem);
+                        }
+                        else {
+                            resultsForItem = "No Data Found";
+                        }
+                    }
+
+                } catch (Exception e) {
+                   Log.i("HTML Exception", e.toString() );
+                }
+            }
+        });
+
+        thread.start();
+
+        return resultsForItem;
     }
 
     public void menuDialog(View view){
