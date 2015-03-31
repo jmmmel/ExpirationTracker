@@ -314,7 +314,8 @@ public class MainActivity extends ActionBarActivity {
     // holds the result of the information for the item, dependent of the UPC of said item
     public String resultsForItem = "No Data Found";
     /**
-     *
+     * The HTMLParser will parse an HTML doc to extract the description and size/weight of the item
+     * tha is being searched
      * @param scanResults results from the bar code scanner
      * @return
      */
