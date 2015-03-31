@@ -232,7 +232,6 @@ public class MainActivity extends ActionBarActivity {
 
     Button addButton;
     private Button scanButton;
-    private String nameFromScanner;
     public void addItem(View view){
         //Intent intent = new Intent(this, AddItem.class);
         // startActivity(intent);
@@ -271,13 +270,12 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-            IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
-            scanIntegrator.initiateScan();
-            // this code crashes the app
-            //EditText myTextBox = (EditText) findViewById(R.id.nameText);
-            //myTextBox.setText(resultsForItem);
+                IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
+                scanIntegrator.initiateScan();
+
             }
         });
+
         Log.i("ResultForItem", resultsForItem);
         custom.show();
     }
@@ -294,14 +292,21 @@ public class MainActivity extends ActionBarActivity {
                 intent);
 
         if(scanningResult != null){
-            String scanContent = scanningResult.getContents();
+            try {
+                String scanContent = scanningResult.getContents();
 
-            Log.i("Scan Results", scanContent);
-            String scanFormat = scanningResult.getFormatName();
-            Log.i("Scan Format", scanFormat);
-            Toast results = Toast.makeText(getApplicationContext(), "" + scanFormat, Toast.LENGTH_LONG);
-            results.show();
-            HTMLParser(scanContent);
+                Log.i("Scan Results", scanContent);
+                String scanFormat = scanningResult.getFormatName();
+                Log.i("Scan Format", scanFormat);
+                Toast results = Toast.makeText(getApplicationContext(), "Scan Complete: " + scanContent, Toast.LENGTH_LONG);
+                results.show();
+                HTMLParser(scanContent);
+
+            } catch (Exception e){
+                Log.i("Scanner Exception", e.toString() );
+                Toast results = Toast.makeText(getApplicationContext(), " Scan Canceled ", Toast.LENGTH_LONG);
+                results.show();
+            }
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -355,7 +360,10 @@ public class MainActivity extends ActionBarActivity {
                             // assign itemInfo the information that was found
                             itemInfo = parsedString2[0] + parsedString3[0];
                             resultsForItem = itemInfo;
-                            Log.e("results in HTMLParser", resultsForItem.toString());
+                            Log.i("results in HTMLParser", resultsForItem);
+                            // this code crashes the app
+                            EditText myTextBox = (EditText) findViewById(R.id.nameText);
+                            //myTextBox.setText(resultsForItem);
                         }
                         else {
                             resultsForItem = "No Data Found";
