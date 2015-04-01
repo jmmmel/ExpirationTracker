@@ -59,7 +59,7 @@ public class BackgroundNotifier extends IntentService {
 
         final PendingIntent contentIntent = PendingIntent
                 .getActivity(this, 0, notificationIntent, 0);
-        notifyBuilder.setSmallIcon(R.drawable.warning_image);
+        notifyBuilder.setSmallIcon(R.drawable.warning);
         notifyBuilder.setContentIntent(contentIntent);
         notifyBuilder.setContentTitle("Expiring");
         if (db.expiringItems()) {

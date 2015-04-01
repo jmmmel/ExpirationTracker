@@ -48,7 +48,7 @@
                 android:id="@+id/toggle_saturday"
                 android:title="Notifications"
                 android:checkable="true"
-                android:checked="false"/>
+                android:checked="true"/>
             <item
                 android:id="@+id/toggle_sunday"
                 android:title="Notifications"
