@@ -77,7 +77,7 @@ public class TimePickerFragment extends DialogFragment
             Log.d("TIMECHAMBER", "AlarmTime: " + today.getTimeInMillis());
             Log.d("TIMECHAMBER", "Difference: " + (today.getTimeInMillis()-System.currentTimeMillis()));
             alarms.setRepeating(AlarmManager.RTC_WAKEUP,
-                    System.currentTimeMillis(), AlarmManager.INTERVAL_DAY, pIntent);
+                    today.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntent);
         } catch (Exception e) {
 
             e.printStackTrace();

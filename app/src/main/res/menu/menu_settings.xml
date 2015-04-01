@@ -21,37 +21,37 @@
         <menu>
             <item
                 android:id="@+id/toggle_monday"
-                android:title="Notifications"
+                android:title="Monday"
                 android:checkable="true"
                 android:checked="false"/>
             <item
                 android:id="@+id/toggle_tuesday"
-                android:title="Notifications"
+                android:title="Tuesday"
                 android:checkable="true"
                 android:checked="false"/>
             <item
                 android:id="@+id/toggle_wednesday"
-                android:title="Notifications"
+                android:title="Wednesday"
                 android:checkable="true"
                 android:checked="false"/>
             <item
                 android:id="@+id/toggle_thursday"
-                android:title="Notifications"
+                android:title="Thursday"
                 android:checkable="true"
                 android:checked="false"/>
             <item
                 android:id="@+id/toggle_friday"
-                android:title="Notifications"
+                android:title="Friday"
                 android:checkable="true"
                 android:checked="false"/>
             <item
                 android:id="@+id/toggle_saturday"
-                android:title="Notifications"
+                android:title="Saturday"
                 android:checkable="true"
                 android:checked="true"/>
             <item
                 android:id="@+id/toggle_sunday"
-                android:title="Notifications"
+                android:title="Sunday"
                 android:checkable="true"
                 android:checked="false"/>
         </menu>

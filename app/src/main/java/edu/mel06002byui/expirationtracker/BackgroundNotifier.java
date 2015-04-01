@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,8 +18,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,10 +49,9 @@ public class BackgroundNotifier extends IntentService {
         SharedPreferences.Editor editSettings;
         String notifTitle = "Service";
         String notifMessage = "Running";
-        settings = getSharedPreferences("notifySettings", Context.MODE_PRIVATE);
-        editSettings = settings.edit();
-        editSettings.putBoolean("firstStart", false);
-        editSettings.commit();
+        settings = PreferenceManager.getDefaultSharedPreferences(this
+                .getApplication());
+
         final Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.putExtra("extra", "value");
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -62,7 +64,37 @@ public class BackgroundNotifier extends IntentService {
         notifyBuilder.setSmallIcon(R.drawable.warning);
         notifyBuilder.setContentIntent(contentIntent);
         notifyBuilder.setContentTitle("Expiring");
-        if (db.expiringItems()) {
+        boolean validDay = false;
+        int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        Set<String> validDays = settings.getStringSet("notify_days", new TreeSet<String>());
+        Log.d("DAYSTEST", "TESTING DAYS");
+        for(String test: validDays)
+            Log.d("DAYSTEST", "day: " + test);
+        switch (dayOfWeek){
+            case Calendar.MONDAY:
+                validDay = validDays.contains("1");
+                break;
+            case Calendar.TUESDAY:
+                validDay = validDays.contains("2");
+                break;
+            case Calendar.WEDNESDAY:
+                validDay = validDays.contains("3");
+                break;
+            case Calendar.THURSDAY:
+                validDay = validDays.contains("4");
+                break;
+            case Calendar.FRIDAY:
+                validDay = validDays.contains("5");
+                break;
+            case Calendar.SATURDAY:
+                validDay = validDays.contains("6");
+                break;
+            case Calendar.SUNDAY:
+                validDay = validDays.contains("7");
+                break;
+        }
+
+        if (validDay && db.expiringItems()) {
             notifyBuilder.
                     setContentText("Some items expiring in a week!");
             NotificationManager mNotificationManager =

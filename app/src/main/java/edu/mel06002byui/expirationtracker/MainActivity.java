@@ -4,16 +4,16 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -26,18 +26,13 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -47,6 +42,7 @@ public class MainActivity extends ActionBarActivity {
     private SharedPreferences settings;
     private SharedPreferences.Editor prefEditor;
     private static final String TAG_MAIN_ACTIVITY= "MainActivity";
+    protected static final String APPLICATION_SETTINGS= "notifySettings";
     private Set<Grocery> allStoredItems = new TreeSet<>();
     BackgroundNotifier monitor;
     private AlertDialog.Builder dialogBuilder;
@@ -62,7 +58,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        settings = getSharedPreferences("notifySettings",MODE_PRIVATE);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
         prefEditor = settings.edit();
         setContentView(R.layout.activity_main);
          lv = (ListView)findViewById(R.id.GroceryList);
@@ -70,8 +66,21 @@ public class MainActivity extends ActionBarActivity {
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
-        if(settings.getBoolean("firstStart", true))
+        if(settings.getBoolean("firstStart", true)) {
+            prefEditor.putBoolean("firstStart", false);
+            prefEditor.putBoolean("notifyStatus", true);
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.HOUR, 9);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            prefEditor.putLong("alarm_time_as_long",c.getTimeInMillis());
+            Set<String> temp = new TreeSet<>();
+            temp.add("6");
+            prefEditor.putStringSet("notify_days", temp);
+            prefEditor.commit();
+
             startSchedule();
+        }
 
     }
 
@@ -167,10 +176,10 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
-        MenuItem toggler = menu.findItem(R.id.toggle_notify);
-        boolean backgroundServiceStarted = settings.getBoolean("notifyStatus", true);
-        toggler.setChecked(backgroundServiceStarted);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //MenuItem toggler = menu.findItem(R.id.toggle_notify);
+        //boolean backgroundServiceStarted = settings.getBoolean("notifyStatus", true);
+       // toggler.setChecked(backgroundServiceStarted);
 
         return true;
     }
@@ -185,6 +194,9 @@ public class MainActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
+
+        /*
         int id = item.getItemId();
         switch (item.getItemId()){
             case R.id.toggle_notify:
@@ -213,8 +225,10 @@ public class MainActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+        */
+        startActivityForResult(new Intent().setClass(this, SetPreferences.class), 13);
 
-
+        return true;
     }
 
 
@@ -233,14 +247,12 @@ public class MainActivity extends ActionBarActivity {
             final PendingIntent pIntent = PendingIntent.getBroadcast(this,
                     1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             Calendar today = Calendar.getInstance();
-            today.set(Calendar.HOUR,settings.getInt("notify_hour",9));
-            today.set(Calendar.MINUTE, settings.getInt("notify_minutes",0));
-            today.set(Calendar.MILLISECOND,0);
+            long alarmTime = settings.getLong("alarm_time_as_long", today.getTimeInMillis());
             Log.d("TIMECHAMBER", "SystemTime: " + System.currentTimeMillis());
             Log.d("TIMECHAMBER", "AlarmTime: " + today.getTimeInMillis());
             Log.d("TIMECHAMBER", "Difference: " + (today.getTimeInMillis()-System.currentTimeMillis()));
             alarms.setRepeating(AlarmManager.RTC_WAKEUP,
-                    today.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntent);
+                    alarmTime, AlarmManager.INTERVAL_DAY, pIntent);
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -349,9 +361,18 @@ public class MainActivity extends ActionBarActivity {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     //retrieve scan result
+        if(requestCode == 13){
+            settings = PreferenceManager.getDefaultSharedPreferences(this);
+            if(settings.getBoolean("notifyStatus",true)) {
+                startSchedule();
+            }
+            else{
+                cancelSchedules();
+            }
+            return;
+        }
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
                 intent);
-
         if(scanningResult != null){
             try {
                 String scanContent = scanningResult.getContents();
@@ -488,6 +509,17 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+
+    public static class PrefsFragment extends PreferenceFragment {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            // Load the preferences from an XML resource
+            addPreferencesFromResource(R.xml.preferences);
+        }
+    }
 
 }
 

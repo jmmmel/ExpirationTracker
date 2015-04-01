@@ -17,20 +17,22 @@
             >Sunday</item>
     </string-array>
 
-    <string-array name="day_pref_default">
+    <string-array name="day_keys">
         <item
-            >false</item>
+            >monday_valid</item>
         <item
-            >false</item>
+            >tuesday_valid</item>
         <item
-            >false</item>
+            >wednesday_valid</item>
         <item
-            >false</item>
+            >thursday_valid</item>
         <item
-            >false</item>
+            >friday_valid</item>
         <item
-            >true</item>
+            >saturday_valid</item>
         <item
-            >false</item>
+            >sunday_valid</item>
     </string-array>
+
+
 </resources>
