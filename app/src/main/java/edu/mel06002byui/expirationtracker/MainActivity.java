@@ -1,8 +1,10 @@
 package edu.mel06002byui.expirationtracker;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -68,7 +70,7 @@ public class MainActivity extends ActionBarActivity {
         populateSetOnCreate();
         displayToListView();
         if(settings.getBoolean("firstStart", true))
-            startService(new Intent(this,BackgroundNotifier.class));
+            startSchedule();
 
     }
 
@@ -190,13 +192,13 @@ public class MainActivity extends ActionBarActivity {
 
                     item.setChecked(false);
                     prefEditor.putBoolean("notifyStatus", false);
-                    stopService(new Intent(this,BackgroundNotifier.class));
+                    cancelSchedules();
 
                 }
                 else{
                     item.setChecked(true);
                     prefEditor.putBoolean("notifyStatus", true);
-                    startService(new Intent(this,BackgroundNotifier.class));
+                    startSchedule();
                 }
                 prefEditor.commit();
                 Log.d("OptionsMenu","After Check");
@@ -213,6 +215,44 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    public void startSchedule() {
+
+        try {
+            AlarmManager alarms = (AlarmManager) this
+                    .getSystemService(Context.ALARM_SERVICE);
+
+            Intent intent = new Intent(getApplicationContext(),
+                    BackgroundAlarm.class);
+            intent.putExtra(BackgroundAlarm.BACKGROUND_ALARM,
+                    BackgroundAlarm.BACKGROUND_ALARM);
+
+            final PendingIntent pIntent = PendingIntent.getBroadcast(this,
+                    1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            alarms.setRepeating(AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis(), AlarmManager.INTERVAL_DAY, pIntent);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
+    public void cancelSchedules() {
+
+        Intent intent = new Intent(getApplicationContext(),
+                BackgroundAlarm.class);
+        intent.putExtra(BackgroundAlarm.BACKGROUND_ALARM,
+                BackgroundAlarm.BACKGROUND_ALARM);
+
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, 1234567,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarms = (AlarmManager) this
+                .getSystemService(Context.ALARM_SERVICE);
+
+        alarms.cancel(pIntent);
+    }
 
     /**
      *  updates the list view to hold the set
@@ -382,18 +422,6 @@ public class MainActivity extends ActionBarActivity {
         return resultsForItem;
     }
 
-    public void menuDialog(View view){
-
-
-    }
-
-
-
-    public void removeXml(View view){
-        Intent intent = new Intent(this, removeXml.class);
-        startActivity(intent);
-
-    }
 
     protected void addGroceryItemToSet(Grocery tempGrocery){
 
@@ -421,6 +449,17 @@ public class MainActivity extends ActionBarActivity {
         return find;
     }
 
+
+    /**
+     * This will read in from the database on opening and store into our allStoredItems
+     */
+    private void populateSetOnCreate(){
+        allStoredItems.addAll(db.getAllGroceries());
+    }
+
+    /**
+     * Used to manipulate settings dialog
+     */
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
@@ -444,16 +483,10 @@ public class MainActivity extends ActionBarActivity {
                     = myApp.getSharedPreferences("notifySettings",MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt("notify_hour",hourOfDay);
-            editor.putInt("notify_minute",minute);
-            editor.commit();
+            editor.putInt("notify_minutes",minute);
+            editor.apply();
         }
     }
 
-    /**
-     * This will read in from the database on opening and store into our allStoredItems
-     */
-    private void populateSetOnCreate(){
-        allStoredItems.addAll(db.getAllGroceries());
-    }
 }
 
