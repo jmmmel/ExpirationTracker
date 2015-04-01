@@ -188,13 +188,14 @@ public class MainActivity extends ActionBarActivity {
             case R.id.toggle_notify:
 
                 if(item.isChecked()){
-
+                    Log.d("TIMECHAMBER", "Turned Off");
                     item.setChecked(false);
                     prefEditor.putBoolean("notifyStatus", false);
                     cancelSchedules();
 
                 }
                 else{
+                    Log.d("TIMECHAMBER", "Turned On");
                     item.setChecked(true);
                     prefEditor.putBoolean("notifyStatus", true);
                     startSchedule();
@@ -214,6 +215,8 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+
+
     private void startSchedule() {
 
         try {
@@ -231,6 +234,9 @@ public class MainActivity extends ActionBarActivity {
             today.set(Calendar.HOUR,settings.getInt("notify_hour",9));
             today.set(Calendar.MINUTE, settings.getInt("notify_minutes",0));
             today.set(Calendar.MILLISECOND,0);
+            Log.d("TIMECHAMBER", "SystemTime: " + System.currentTimeMillis());
+            Log.d("TIMECHAMBER", "AlarmTime: " + today.getTimeInMillis());
+            Log.d("TIMECHAMBER", "Difference: " + (today.getTimeInMillis()-System.currentTimeMillis()));
             alarms.setRepeating(AlarmManager.RTC_WAKEUP,
                     today.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntent);
         } catch (Exception e) {
@@ -459,36 +465,7 @@ public class MainActivity extends ActionBarActivity {
         allStoredItems.addAll(db.getAllGroceries());
     }
 
-    /**
-     * Used to manipulate settings dialog
-     */
-    public static class TimePickerFragment extends DialogFragment
-            implements TimePickerDialog.OnTimeSetListener {
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
-        }
-
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
-            Log.d("OnTimeSet", "Hour: " + hourOfDay);
-            Log.d("OnTimeSet", "Minute: " + minute);
-            SharedPreferences settings
-                    = this.getActivity().getSharedPreferences("notifySettings", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putInt("notify_hour",hourOfDay);
-            editor.putInt("notify_minutes",minute);
-            editor.apply();
-        }
-    }
 
 }
 
