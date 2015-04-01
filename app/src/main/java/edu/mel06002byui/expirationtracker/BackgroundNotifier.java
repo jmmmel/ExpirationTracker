@@ -72,25 +72,25 @@ public class BackgroundNotifier extends IntentService {
             Log.d("DAYSTEST", "day: " + test);
         switch (dayOfWeek){
             case Calendar.MONDAY:
-                validDay = validDays.contains("1");
+                validDay = validDays.contains("monday_valid");
                 break;
             case Calendar.TUESDAY:
-                validDay = validDays.contains("2");
+                validDay = validDays.contains("tuesday_valid");
                 break;
             case Calendar.WEDNESDAY:
-                validDay = validDays.contains("3");
+                validDay = validDays.contains("wednesday_valid");
                 break;
             case Calendar.THURSDAY:
-                validDay = validDays.contains("4");
+                validDay = validDays.contains("thursday_valid");
                 break;
             case Calendar.FRIDAY:
-                validDay = validDays.contains("5");
+                validDay = validDays.contains("friday_valid");
                 break;
             case Calendar.SATURDAY:
-                validDay = validDays.contains("6");
+                validDay = validDays.contains("saturday_valid");
                 break;
             case Calendar.SUNDAY:
-                validDay = validDays.contains("7");
+                validDay = validDays.contains("sunday_valid");
                 break;
         }
 

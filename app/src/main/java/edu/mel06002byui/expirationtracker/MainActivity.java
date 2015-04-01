@@ -70,12 +70,13 @@ public class MainActivity extends ActionBarActivity {
             prefEditor.putBoolean("firstStart", false);
             prefEditor.putBoolean("notifyStatus", true);
             Calendar c = Calendar.getInstance();
+            c.set(Calendar.AM_PM,Calendar.AM);
             c.set(Calendar.HOUR, 9);
             c.set(Calendar.MINUTE, 0);
             c.set(Calendar.MILLISECOND, 0);
             prefEditor.putLong("alarm_time_as_long",c.getTimeInMillis());
             Set<String> temp = new TreeSet<>();
-            temp.add("6");
+            temp.add("saturday_valid");
             prefEditor.putStringSet("notify_days", temp);
             prefEditor.commit();
 
