@@ -152,7 +152,7 @@ class Grocery implements Comparable<Grocery>{
      */
     @Override
     public String toString(){
-        return name + "\nExpire Date: " + dateAsString()
+        return name + "\nExpire Date: " + getDateAsMonthDayYear()
                 + "\nDays Left: " + daysBetween(expireDate, todayTrimmed())
                 + "\nQuantity: " + quantity;
 
@@ -196,6 +196,66 @@ class Grocery implements Comparable<Grocery>{
         return formatter.format(expireDate.getTime());
     }
 
+    /**
+     * format the date
+     * @return string that will be formatted as Month day, year
+     */
+    public String getDateAsMonthDayYear(){
+
+        Integer monthAsInt = expireDate.get(Calendar.MONTH);
+        Log.i("calendar", monthAsInt.toString());
+        Log.i("calendar month test",new SimpleDateFormat("MMMMM").format(expireDate.getTime()));
+        Integer dayAsInt = expireDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+        Log.i("calendar", dayAsInt.toString());
+        Integer yearAsInt = expireDate.get(Calendar.YEAR);
+        Log.i("calendar", yearAsInt.toString());
+        String dateForListView = "";
+
+
+        switch (monthAsInt){
+            case 0:
+                dateForListView += "January ";
+                break;
+            case 1:
+                dateForListView += "February ";
+                break;
+            case 2:
+                dateForListView += "March ";
+                break;
+            case 3:
+                dateForListView += "April ";
+                break;
+            case 4:
+                dateForListView += "May ";
+                break;
+            case 5:
+                dateForListView += "June ";
+                break;
+            case 6:
+                dateForListView += "July ";
+                break;
+            case 7:
+                dateForListView += "August ";
+                break;
+            case 8:
+                dateForListView += "September ";
+                break;
+            case 9:
+                dateForListView += "October ";
+                break;
+            case 10:
+                dateForListView += "November ";
+                break;
+            case 11:
+                dateForListView += "December ";
+                break;
+        }
+
+        dateForListView += dayAsInt + ", " + yearAsInt;
+        Log.i("calendar string", dateForListView);
+
+        return dateForListView;
+    }
     /**
      * Used to set the date with a string
      * @param newDate string in format YYYY-MM-DD

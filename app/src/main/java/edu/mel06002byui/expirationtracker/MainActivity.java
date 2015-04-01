@@ -337,10 +337,6 @@ public class MainActivity extends ActionBarActivity {
         scanIntegrator.initiateScan();
     }
 
-    public void fillEditText(Dialog custom){
-
-    }
-
     /**
      *
      * @param requestCode default value
