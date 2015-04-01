@@ -49,6 +49,8 @@ public class MainActivity extends ActionBarActivity {
     private AlertDialog.Builder dialogBuilder;
     private GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
     ListView lv;
+    // holds the result of the information for the item, dependent of the UPC of said item
+    public String resultsForItem = "No Data Found";
 
     /**
      *
@@ -232,11 +234,12 @@ public class MainActivity extends ActionBarActivity {
 
     Button addButton;
     private Button scanButton;
+    Dialog custom;
     public void addItem(View view){
         //Intent intent = new Intent(this, AddItem.class);
         // startActivity(intent);
 
-        final Dialog custom = new Dialog(MainActivity.this);
+        custom = new Dialog(MainActivity.this);
 
         custom.setContentView(R.layout.activity_add_item);
         custom.setTitle("Add Item");
@@ -270,14 +273,23 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-                IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
-                scanIntegrator.initiateScan();
+                startScanner();
 
             }
         });
 
-        Log.i("ResultForItem", resultsForItem);
+
         custom.show();
+        Log.i("ResultForItem", resultsForItem);
+    }
+
+    public void startScanner() {
+        IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
+        scanIntegrator.initiateScan();
+    }
+
+    public void fillEditText(Dialog custom){
+
     }
 
     /**
@@ -298,13 +310,25 @@ public class MainActivity extends ActionBarActivity {
                 Log.i("Scan Results", scanContent);
                 String scanFormat = scanningResult.getFormatName();
                 Log.i("Scan Format", scanFormat);
-                Toast results = Toast.makeText(getApplicationContext(), "Scan Complete: " + scanContent, Toast.LENGTH_LONG);
-                results.show();
                 HTMLParser(scanContent);
+                String NoDataFound = "No Data Found";
+
+                if(!resultsForItem.equals(NoDataFound)) {
+
+                    EditText myTextBox = (EditText) custom.findViewById(R.id.nameText);
+                    Log.i("inside scan button", resultsForItem);
+                    myTextBox.setText(resultsForItem);
+
+                } else {
+                    Toast results = Toast.makeText(getApplicationContext(), "No Information Found",
+                            Toast.LENGTH_LONG);
+                    results.show();
+                }
 
             } catch (Exception e){
                 Log.i("Scanner Exception", e.toString() );
-                Toast results = Toast.makeText(getApplicationContext(), " Scan Canceled ", Toast.LENGTH_LONG);
+                Toast results = Toast.makeText(getApplicationContext(), " Scan Canceled ",
+                        Toast.LENGTH_LONG);
                 results.show();
             }
         }
@@ -315,22 +339,18 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-
-    // holds the result of the information for the item, dependent of the UPC of said item
-    public String resultsForItem = "No Data Found";
     /**
      * The HTMLParser will parse an HTML doc to extract the description and size/weight of the item
-     * tha is being searched
+     * that is being searched
      * @param scanResults results from the bar code scanner
-     * @return
      */
-    public String HTMLParser(final String scanResults) {
+    public void HTMLParser(final String scanResults) {
 
         Thread thread = new Thread(new Runnable(){
 
             @Override
             public void run() {
-                String itemInfo = "No data found";
+                String itemInfo;
                 Document HTML;
                 try {
                     HTML = Jsoup.connect("http://www.upcdatabase.com/item/" + scanResults)
@@ -360,10 +380,8 @@ public class MainActivity extends ActionBarActivity {
                             // assign itemInfo the information that was found
                             itemInfo = parsedString2[0] + parsedString3[0];
                             resultsForItem = itemInfo;
+
                             Log.i("results in HTMLParser", resultsForItem);
-                            // this code crashes the app
-                            EditText myTextBox = (EditText) findViewById(R.id.nameText);
-                            //myTextBox.setText(resultsForItem);
                         }
                         else {
                             resultsForItem = "No Data Found";
@@ -376,9 +394,13 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        thread.start();
 
-        return resultsForItem;
+        try {
+            thread.start();
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void menuDialog(View view){
