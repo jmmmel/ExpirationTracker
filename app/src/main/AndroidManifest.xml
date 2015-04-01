@@ -21,9 +21,11 @@
             android:label="@string/title_activity_remove_xml" >
         </activity>
         <service
-            android:enabled="true"
             android:name=".BackgroundNotifier"
             />
+        <receiver
+            android:name=".BackgroundAlarm"></receiver>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
+
 </manifest>

@@ -140,6 +140,8 @@ class Grocery implements Comparable<Grocery>{
         int compare = this.getExpireDate().compareTo(another.getExpireDate());
         if(compare == 0)
             compare = this.getName().compareTo(another.getName());
+        if(compare == 0)
+            compare = ((Integer)this.getID()).compareTo((Integer)another.getID());
         return compare;
     }
 

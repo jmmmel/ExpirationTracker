@@ -37,6 +37,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -45,7 +46,6 @@ import java.util.TreeSet;
 public class MainActivity extends ActionBarActivity {
     private SharedPreferences settings;
     private SharedPreferences.Editor prefEditor;
-    private static Context myApp;
     private static final String TAG_MAIN_ACTIVITY= "MainActivity";
     private Set<Grocery> allStoredItems = new TreeSet<>();
     BackgroundNotifier monitor;
@@ -60,7 +60,6 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myApp = this;
         settings = getSharedPreferences("notifySettings",MODE_PRIVATE);
         prefEditor = settings.edit();
         setContentView(R.layout.activity_main);
@@ -215,7 +214,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void startSchedule() {
+    private void startSchedule() {
 
         try {
             AlarmManager alarms = (AlarmManager) this
@@ -228,9 +227,12 @@ public class MainActivity extends ActionBarActivity {
 
             final PendingIntent pIntent = PendingIntent.getBroadcast(this,
                     1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+            Calendar today = Calendar.getInstance();
+            today.set(Calendar.HOUR,settings.getInt("notify_hour",9));
+            today.set(Calendar.MINUTE, settings.getInt("notify_minutes",0));
+            today.set(Calendar.MILLISECOND,0);
             alarms.setRepeating(AlarmManager.RTC_WAKEUP,
-                    System.currentTimeMillis(), AlarmManager.INTERVAL_DAY, pIntent);
+                    today.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntent);
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -238,7 +240,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void cancelSchedules() {
+    private void cancelSchedules() {
 
         Intent intent = new Intent(getApplicationContext(),
                 BackgroundAlarm.class);
@@ -480,7 +482,7 @@ public class MainActivity extends ActionBarActivity {
             Log.d("OnTimeSet", "Hour: " + hourOfDay);
             Log.d("OnTimeSet", "Minute: " + minute);
             SharedPreferences settings
-                    = myApp.getSharedPreferences("notifySettings",MODE_PRIVATE);
+                    = this.getActivity().getSharedPreferences("notifySettings", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt("notify_hour",hourOfDay);
             editor.putInt("notify_minutes",minute);
