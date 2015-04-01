@@ -203,12 +203,8 @@ class Grocery implements Comparable<Grocery>{
     public String getDateAsMonthDayYear(){
 
         Integer monthAsInt = expireDate.get(Calendar.MONTH);
-        Log.i("calendar", monthAsInt.toString());
-        Log.i("calendar month test",new SimpleDateFormat("MMMMM").format(expireDate.getTime()));
         Integer dayAsInt = expireDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
-        Log.i("calendar", dayAsInt.toString());
         Integer yearAsInt = expireDate.get(Calendar.YEAR);
-        Log.i("calendar", yearAsInt.toString());
         String dateForListView = "";
 
 
