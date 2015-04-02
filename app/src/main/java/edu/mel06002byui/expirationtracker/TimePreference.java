@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
+ * Code recieved from
  * http://stackoverflow.com/questions/5533078/timepicker-in-preferencescreen
  * second solution that stores data as long
  */

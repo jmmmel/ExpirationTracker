@@ -18,7 +18,6 @@ public class BackgroundAlarm extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Log.i("Alarm Receiver", "Entered");
-        Toast.makeText(context, "Entered", Toast.LENGTH_SHORT).show();
 
         Bundle bundle = intent.getExtras();
         String action = bundle.getString(BACKGROUND_ALARM);
@@ -28,7 +27,6 @@ public class BackgroundAlarm extends BroadcastReceiver {
             context.startService(inService);
         } else {
             Log.i("Alarm Receiver", "Else loop");
-            Toast.makeText(context, "Else loop", Toast.LENGTH_SHORT).show();
         }
     }
 }
