@@ -288,7 +288,7 @@ public class MainActivity extends ActionBarActivity {
                     month = expDate.getMonth();
                     year = expDate.getYear();
                     Grocery grocery = new Grocery(name, quantityAsInt, month, Day, year);
-
+                    Log.d("DAYS ADDING ISSUES","In add");
                     addGroceryItemToSet(grocery);
 
                     displayToListView();

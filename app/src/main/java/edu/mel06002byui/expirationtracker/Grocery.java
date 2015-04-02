@@ -218,7 +218,7 @@ class Grocery implements Comparable<Grocery> {
     public String getDateAsMonthDayYear() {
 
         Integer monthAsInt = expireDate.get(Calendar.MONTH);
-        Integer dayAsInt = expireDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+        Integer dayAsInt = expireDate.get(Calendar.DAY_OF_MONTH);
         Integer yearAsInt = expireDate.get(Calendar.YEAR);
         String dateForListView = "";
 
@@ -282,7 +282,12 @@ class Grocery implements Comparable<Grocery> {
         int year = Integer.parseInt(tokens[0]);
         int month = Integer.parseInt(tokens[1]) - 1;
         int day = Integer.parseInt(tokens[2]);
+
         expireDate = new GregorianCalendar(year, month, day);
+        expireDate.set(Calendar.HOUR_OF_DAY, 0);
+        expireDate.set(Calendar.MINUTE, 0);
+        expireDate.set(Calendar.SECOND, 0);
+        expireDate.set(Calendar.MILLISECOND, 0);
     }
 
     /**
