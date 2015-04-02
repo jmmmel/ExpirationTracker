@@ -350,7 +350,7 @@ public class MainActivity extends ActionBarActivity {
                     EditText myTextBox = (EditText) custom.findViewById(R.id.nameText);
                     Log.i("inside scan button", resultsForItem);
                     myTextBox.setText(resultsForItem);
-
+                    resultsForItem = NoDataFound;
                 } else {
                     Toast results = Toast.makeText(getApplicationContext(), "No Information Found",
                             Toast.LENGTH_LONG);
@@ -398,15 +398,15 @@ public class MainActivity extends ActionBarActivity {
                         if (content.get(0).text().contains("UPC-A EAN/UCC-13 Description")) {
 
                             // various steps to split the string to get the item information
-                            String[] parsedString = content.get(0).text().split("UPC-A EAN/UCC-13 Description");
+                            String[] parsedString = content.get(0).text().split("UPC-A EAN/UCC-13 Description ");
                             Log.i("parsedString", parsedString[0]);
                             Log.i("parsedString", parsedString[1]);
 
-                            String[] parsedString2 = parsedString[1].split("Size/Weight");
+                            String[] parsedString2 = parsedString[1].split("Size/Weight ");
                             Log.i("ParsedString 2", parsedString2[0]);
                             Log.i("ParsedString 2", parsedString2[1]);
 
-                            String[] parsedString3 = parsedString2[1].split("Issuing Country");
+                            String[] parsedString3 = parsedString2[1].split("Issuing Country ");
                             Log.i("ParsedString 3", parsedString3[0]);
                             Log.i("ParsedString 3", parsedString3[1]);
                             // assign itemInfo the information that was found
