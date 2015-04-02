@@ -171,12 +171,7 @@ public class MainActivity extends ActionBarActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        //MenuItem toggler = menu.findItem(R.id.toggle_notify);
-        //boolean backgroundServiceStarted = settings.getBoolean("notifyStatus", true);
-        // toggler.setChecked(backgroundServiceStarted);
-
         return true;
     }
 
@@ -186,41 +181,7 @@ public class MainActivity extends ActionBarActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
 
-
-        /*
-        int id = item.getItemId();
-        switch (item.getItemId()){
-            case R.id.toggle_notify:
-
-                if(item.isChecked()){
-                    Log.d("TIMECHAMBER", "Turned Off");
-                    item.setChecked(false);
-                    prefEditor.putBoolean("notifyStatus", false);
-                    cancelSchedules();
-
-                }
-                else{
-                    Log.d("TIMECHAMBER", "Turned On");
-                    item.setChecked(true);
-                    prefEditor.putBoolean("notifyStatus", true);
-                    startSchedule();
-                }
-                prefEditor.commit();
-                Log.d("OptionsMenu","After Check");
-                return true;
-            case R.id.time_status:
-                DialogFragment newFragment = new TimePickerFragment();
-                newFragment.show(getFragmentManager(),"timePicker");
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-        */
         startActivityForResult(new Intent().setClass(this, SetPreferences.class), 13);
 
         return true;
@@ -286,6 +247,7 @@ public class MainActivity extends ActionBarActivity {
         groceryList.setAdapter(arrayAdapter);
 
     }
+
 
     Button addButton;
     private Button scanButton;
