@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
+    <SwitchPreference
         android:key="notifyStatus"
-        android:title="Enable/Disable Notify" />
+        android:title="Notifications" />
     <edu.mel06002byui.expirationtracker.TimePreference
         android:key="alarm_time_as_long"
         android:title="Set Notification Time" />
@@ -11,5 +11,8 @@
         android:title="Days to Notify"
         android:entries="@array/days_in_week"
         android:entryValues="@array/day_keys" />
+    <SwitchPreference
+        android:key="clearDatabase"
+        android:title="Clear All"/>
 
 </PreferenceScreen>

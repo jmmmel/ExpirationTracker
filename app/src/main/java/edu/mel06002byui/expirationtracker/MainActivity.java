@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -75,6 +76,7 @@ public class MainActivity extends ActionBarActivity {
             Set<String> temp = new TreeSet<>();
             temp.add("saturday_valid");
             prefEditor.putStringSet("notify_days", temp);
+            prefEditor.putBoolean("clearDatabase", false);
             prefEditor.commit();
 
             startSchedule();
@@ -330,6 +332,13 @@ public class MainActivity extends ActionBarActivity {
                 startSchedule();
             } else {
                 cancelSchedules();
+            }
+            if(settings.getBoolean("clearDatabase",false)){
+                db.clearDatabase();
+                allStoredItems.clear();
+                displayToListView();
+                prefEditor.putBoolean("clearDatabase",false);
+                prefEditor.apply();
             }
             return;
         }

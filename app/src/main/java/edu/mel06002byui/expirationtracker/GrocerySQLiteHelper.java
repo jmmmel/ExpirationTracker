@@ -294,10 +294,9 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     /**
      * Drops the groceries table and then recreates the groceries table so that it is empty
      *
-     * @param db database that will be cleared
      */
-    public void clearDatabase(SQLiteDatabase db) {
-
+    protected void clearDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
         // query to drop groceries table
         String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_GROCERIES;
         db.execSQL(DROP_TABLE);
