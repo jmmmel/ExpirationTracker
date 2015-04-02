@@ -308,22 +308,34 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
+                String name = "";
+                String quantity = "";
+                int Day = -1;
+                int month = -1;
+                int year = -1;
+               // if(custom.findViewById(R.id.nameText).toString().length() > 0 &&
+                //   custom.findViewById(R.id.QuantityText).toString().length() > 0 ){
+
                 EditText nameEdit = (EditText) custom.findViewById(R.id.nameText);
                 DatePicker expDate = (DatePicker) custom.findViewById(R.id.datePicker);
                 EditText quantityEdit = (EditText) custom.findViewById(R.id.QuantityText);
-                String name = nameEdit.getText().toString();
-                String quantity = quantityEdit.getText().toString();
-                int quantityAsInt = Integer.parseInt(quantity);
-                int Day = expDate.getDayOfMonth();
-                int month = expDate.getMonth();
-                int year = expDate.getYear();
+                name = nameEdit.getText().toString();
+                quantity = quantityEdit.getText().toString();
+                if(quantity.equals("") || name.equals("")){
+                    Toast.makeText(getApplicationContext(), "Fill in all fields", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    int quantityAsInt = Integer.parseInt(quantity);
+                    Day = expDate.getDayOfMonth();
+                    month = expDate.getMonth();
+                    year = expDate.getYear();
+                    Grocery grocery = new Grocery(name, quantityAsInt, month, Day, year);
 
-                Grocery grocery = new Grocery(name, quantityAsInt, month, Day, year);
+                    addGroceryItemToSet(grocery);
 
-                addGroceryItemToSet(grocery);
-
-                displayToListView();
-                custom.cancel();
+                    displayToListView();
+                    custom.cancel();
+                }
             }
         });
 
