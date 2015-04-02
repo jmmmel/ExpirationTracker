@@ -26,7 +26,6 @@ public class BackgroundNotifier extends IntentService {
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
      */
     public BackgroundNotifier() {
         super("BackgroundNotifier");
@@ -58,9 +57,9 @@ public class BackgroundNotifier extends IntentService {
         int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         Set<String> validDays = settings.getStringSet("notify_days", new TreeSet<String>());
         Log.d("DAYSTEST", "TESTING DAYS");
-        for(String test: validDays)
+        for (String test : validDays)
             Log.d("DAYSTEST", "day: " + test);
-        switch (dayOfWeek){
+        switch (dayOfWeek) {
             case Calendar.MONDAY:
                 validDay = validDays.contains("monday_valid");
                 Log.d("DAYSTEST", "monday_valid: " + validDay);

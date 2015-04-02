@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -27,9 +26,11 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     // Database name
     private static final String DATABASE_NAME = "GroceriesDB";
 
-    /*******************************************************************
+    /**
+     * ****************************************************************
      * constants for table and column names
-     *******************************************************************/
+     * *****************************************************************
+     */
     private static final String TABLE_GROCERIES = "groceries";
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
@@ -39,6 +40,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * default constructor
+     *
      * @param context default context
      */
     public GrocerySQLiteHelper(Context context) {
@@ -48,6 +50,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     /**
      * create a new database and create a table called groceries
      * groceries table will contain name, quantity and expiration date
+     *
      * @param db database object
      */
     @Override
@@ -67,8 +70,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param db // database that will be upgraded
+     * @param db         // database that will be upgraded
      * @param oldVersion current version of Database
      * @param newVersion new version of database
      */
@@ -81,11 +83,12 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *  add a grocery to the Database
+     * add a grocery to the Database
+     *
      * @param grocery item to be added to the Database
      * @return The id of the grocery item that was added to Database
      */
-    public long addGroceryToDatabase(Grocery grocery){
+    public long addGroceryToDatabase(Grocery grocery) {
         long idToReturn = 0;
         // log
         Log.d("addGroceryToDatabase", grocery.toString());
@@ -103,28 +106,29 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
         //get expiration date and put it in values
         values.put(KEY_EXPIRATION_DATE, grocery.dateAsString());
-        Log.d("ValuesToBeInserted",values.toString());
-        Log.d("Inserting Table " + idToReturn,"*******************");
+        Log.d("ValuesToBeInserted", values.toString());
+        Log.d("Inserting Table " + idToReturn, "*******************");
         // insert into table
         idToReturn = db.insert(TABLE_GROCERIES, null, values);
-        Log.d("Inserting Table " + idToReturn,"*******************");
+        Log.d("Inserting Table " + idToReturn, "*******************");
         db.close();
         return idToReturn;
     }
 
     /**
      * gets a single grocery based of its id
+     *
      * @param id // id is the primary key
      * @return grocery that is in the Database
      */
-    public Grocery getGroceryByID(int id){
+    public Grocery getGroceryByID(int id) {
         Grocery grocery = new Grocery();
         try {
             // get reference to readable DB
             SQLiteDatabase db = this.getReadableDatabase();
 
             // build query
-            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_GROCERIES + " WHERE id=" + id,null);
+            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_GROCERIES + " WHERE id=" + id, null);
             // if a result is returned get the first result
             if (cursor != null)
                 cursor.moveToFirst();
@@ -135,22 +139,23 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
                 grocery.setName(cursor.getString(1));
                 grocery.setQuantity(Integer.parseInt(cursor.getString(2)));
                 grocery.setDateWithString(cursor.getString(3));
-                Log.d("getGrocerycursor 3",cursor.getString(3));
+                Log.d("getGrocerycursor 3", cursor.getString(3));
                 cursor.close();
             }
-            Log.d("getGroceryByID ( "+ id +" )", grocery.toString());
-        } catch(NullPointerException e){
+            Log.d("getGroceryByID ( " + id + " )", grocery.toString());
+        } catch (NullPointerException e) {
             Log.e("getGrocery", e.toString());
-            Log.d("getGroceryByID ( "+ id +" )", grocery.toString());
+            Log.d("getGroceryByID ( " + id + " )", grocery.toString());
         }
         return grocery;
     }
 
     /**
      * will create a tree set of groceries that will be returned
+     *
      * @return setOfGroceries
      */
-    public Set<Grocery> getAllGroceries(){
+    public Set<Grocery> getAllGroceries() {
         Set<Grocery> setOfGroceries = new TreeSet<>();
 
         // build query string
@@ -158,23 +163,23 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery(query,null);
+        Cursor cursor = db.rawQuery(query, null);
 
         //go through each row and build a grocery item and add
         // it to the set of books
         Grocery grocery;
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
 
             // loop through the cursor and create a grocery object and add it to
             // the set of groceries
-            do{
+            do {
                 // create Grocery object
                 grocery = new Grocery();
                 grocery.setId(Integer.parseInt(cursor.getString(0)));
                 grocery.setName(cursor.getString(1));
                 grocery.setQuantity(Integer.parseInt(cursor.getString(2)));
                 grocery.setDateWithString(cursor.getString(3));
-                Log.d(TAG_GROCERY_DB,cursor.getString(3));
+                Log.d(TAG_GROCERY_DB, cursor.getString(3));
                 // add grocery object to set
                 Log.d("getAllGroceriesaddtoset", grocery.toString());
                 setOfGroceries.add(grocery);
@@ -192,11 +197,10 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *
      * @param grocery object that will be updated
      * @return id of updated grocery
      */
-    public int updateGroceryItem(Grocery grocery){
+    public int updateGroceryItem(Grocery grocery) {
         Log.d("Grocery to be updated", grocery.toString());
         // get reference to writable db
         SQLiteDatabase db = this.getWritableDatabase();
@@ -207,7 +211,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         values.put("quantity", grocery.getQuantity());
         values.put("expirationDate", grocery.dateAsString());
         int i = db.update(TABLE_GROCERIES, values, KEY_ID + " = ?"
-                , new String[] {String.valueOf(grocery.getID())});
+                , new String[]{String.valueOf(grocery.getID())});
 
         //close db
         db.close();
@@ -216,15 +220,16 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * takes the grocery to be deleted
+     *
      * @param grocery to be deleted
      */
-    public void deleteItemFromDB(Grocery grocery){
+    public void deleteItemFromDB(Grocery grocery) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         // delete item from db
         db.delete(TABLE_GROCERIES, KEY_ID + " = ?"
-                ,new String[]{ String.valueOf(grocery.getID())});
+                , new String[]{String.valueOf(grocery.getID())});
         // close db
         db.close();
 
@@ -232,10 +237,9 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *
      * @return if items are to expire return true
      */
-    public boolean expiringItems(){
+    public boolean expiringItems() {
         // return true is items are going to expire within the next week
 
         Calendar today = new GregorianCalendar();
@@ -249,7 +253,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
         // calendar object will be set to a date from the database
         Calendar tempCalendar = new GregorianCalendar();
-        Log.d("Size of Array","" + groceryArray.size());
+        Log.d("Size of Array", "" + groceryArray.size());
 
         // walk through the groceryArray and return true if there are groceries that are going to
         // expire
@@ -261,7 +265,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
             Log.d("today", "" + today.getTimeInMillis());
             Log.d("weekFromToday", "" + weekFromToday.getTimeInMillis());
             if ((tempCalendar.getTimeInMillis() >= today.getTimeInMillis())
-                    && (tempCalendar.getTimeInMillis() < weekFromToday.getTimeInMillis())){
+                    && (tempCalendar.getTimeInMillis() < weekFromToday.getTimeInMillis())) {
 
                 return true;
             }
@@ -272,28 +276,30 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * Used to set the date with a string
+     *
      * @param newDate string in format MM/dd/yyyy
      */
-    public Calendar setDateWithString(String newDate){
+    public Calendar setDateWithString(String newDate) {
         String[] tokens = newDate.split("-");
-        if(tokens.length != 3) {
+        if (tokens.length != 3) {
             Log.d("SetDateWithString", "Incorrect Format");
             return null;
         }
         int year = Integer.parseInt(tokens[0]);
-        int month = Integer.parseInt(tokens[1])-1;
+        int month = Integer.parseInt(tokens[1]) - 1;
         int day = Integer.parseInt(tokens[2]);
-        return new GregorianCalendar(year,month,day);
+        return new GregorianCalendar(year, month, day);
     }
 
     /**
      * Drops the groceries table and then recreates the groceries table so that it is empty
+     *
      * @param db database that will be cleared
      */
-    public void clearDatabase(SQLiteDatabase db){
+    public void clearDatabase(SQLiteDatabase db) {
 
         // query to drop groceries table
-        String DROP_TABLE ="DROP TABLE IF EXISTS " + TABLE_GROCERIES;
+        String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_GROCERIES;
         db.execSQL(DROP_TABLE);
 
         // SQL statement to create groceries table

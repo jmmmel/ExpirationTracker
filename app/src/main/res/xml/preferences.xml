@@ -2,16 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
         android:key="notifyStatus"
-        android:title="Enable/Disable Notify"
-    />
+        android:title="Enable/Disable Notify" />
     <edu.mel06002byui.expirationtracker.TimePreference
         android:key="alarm_time_as_long"
-        android:title="Set Notification Time"/>
+        android:title="Set Notification Time" />
     <MultiSelectListPreference
         android:key="notify_days"
         android:title="Days to Notify"
         android:entries="@array/days_in_week"
-        android:entryValues="@array/day_keys"
-        />
+        android:entryValues="@array/day_keys" />
 
 </PreferenceScreen>

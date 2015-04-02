@@ -28,6 +28,7 @@ import android.widget.Toast;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -38,8 +39,8 @@ import java.util.TreeSet;
 public class MainActivity extends ActionBarActivity {
     private SharedPreferences settings;
     private SharedPreferences.Editor prefEditor;
-    private static final String TAG_MAIN_ACTIVITY= "MainActivity";
-    protected static final String APPLICATION_SETTINGS= "notifySettings";
+    private static final String TAG_MAIN_ACTIVITY = "MainActivity";
+    protected static final String APPLICATION_SETTINGS = "notifySettings";
     private Set<Grocery> allStoredItems = new TreeSet<>();
     BackgroundNotifier monitor;
     private AlertDialog.Builder dialogBuilder;
@@ -49,7 +50,6 @@ public class MainActivity extends ActionBarActivity {
     public String resultsForItem = "No Data Found";
 
     /**
-     *
      * @param savedInstanceState
      */
     @Override
@@ -58,20 +58,20 @@ public class MainActivity extends ActionBarActivity {
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         prefEditor = settings.edit();
         setContentView(R.layout.activity_main);
-         lv = (ListView)findViewById(R.id.GroceryList);
+        lv = (ListView) findViewById(R.id.GroceryList);
         registerForContextMenu(lv);
         Log.i(TAG_MAIN_ACTIVITY, "Populating set");
         populateSetOnCreate();
         displayToListView();
-        if(settings.getBoolean("firstStart", true)) {
+        if (settings.getBoolean("firstStart", true)) {
             prefEditor.putBoolean("firstStart", false);
             prefEditor.putBoolean("notifyStatus", true);
             Calendar c = Calendar.getInstance();
-            c.set(Calendar.AM_PM,Calendar.AM);
+            c.set(Calendar.AM_PM, Calendar.AM);
             c.set(Calendar.HOUR, 9);
             c.set(Calendar.MINUTE, 0);
             c.set(Calendar.MILLISECOND, 0);
-            prefEditor.putLong("alarm_time_as_long",c.getTimeInMillis());
+            prefEditor.putLong("alarm_time_as_long", c.getTimeInMillis());
             Set<String> temp = new TreeSet<>();
             temp.add("saturday_valid");
             prefEditor.putStringSet("notify_days", temp);
@@ -82,9 +82,9 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuinfo){
-            super.onCreateContextMenu(menu, v, menuinfo);
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuinfo) {
+        super.onCreateContextMenu(menu, v, menuinfo);
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menulong, menu);
     }
@@ -96,19 +96,18 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        int selectedPostion = ((AdapterView.AdapterContextMenuInfo)info).position;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int selectedPostion = ((AdapterView.AdapterContextMenuInfo) info).position;
         Iterator<Grocery> iterator = allStoredItems.iterator();
         selectedGrocery = null;
-        for(int i = 0; i < selectedPostion + 1; i++)
+        for (int i = 0; i < selectedPostion + 1; i++)
             selectedGrocery = iterator.next();
-        if(null == selectedGrocery) {
+        if (null == selectedGrocery) {
             Log.d("ContectMenu", "Didn't find a selected postition");
             return true;
         }
         Log.d("ContextMenu", selectedGrocery.toString());
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.id_delete:
                 allStoredItems.remove(selectedGrocery);
                 db.deleteItemFromDB(selectedGrocery);
@@ -121,21 +120,21 @@ public class MainActivity extends ActionBarActivity {
 
                 custom.setContentView(R.layout.activity_edit_grocery);
                 custom.setTitle("Edit Item");
-                final EditText nameEdit = (EditText)custom.findViewById(R.id.editGroceryTextName);
+                final EditText nameEdit = (EditText) custom.findViewById(R.id.editGroceryTextName);
                 nameEdit.setText(selectedGrocery.getName());
-                final EditText quantityEdit = (EditText)custom.findViewById(R.id.editGroceryTextQuantity);
+                final EditText quantityEdit = (EditText) custom.findViewById(R.id.editGroceryTextQuantity);
                 quantityEdit.setText("" + selectedGrocery.getQuantity());
                 final DatePicker editDate = (DatePicker) custom.findViewById(R.id.editDatePicker);
                 String date = selectedGrocery.dateAsString();
                 String[] dateParse = date.split("-");
                 int year = Integer.parseInt(dateParse[0]);
                 int day = Integer.parseInt(dateParse[2]);
-                int month = Integer.parseInt(dateParse[1])-1;
-                editDate.updateDate(year,month,day);
-                Log.d("ContextMenu","" + editDate.getYear() + "-" + editDate.getMonth()
+                int month = Integer.parseInt(dateParse[1]) - 1;
+                editDate.updateDate(year, month, day);
+                Log.d("ContextMenu", "" + editDate.getYear() + "-" + editDate.getMonth()
                         + "-" + editDate.getDayOfMonth());
-                saveEdit = (Button)custom.findViewById(R.id.editSaveButton);
-                cancelEdit = (Button)custom.findViewById(R.id.editCancelButton);
+                saveEdit = (Button) custom.findViewById(R.id.editSaveButton);
+                cancelEdit = (Button) custom.findViewById(R.id.editCancelButton);
                 saveEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -143,8 +142,8 @@ public class MainActivity extends ActionBarActivity {
                         selectedGrocery
                                 .setQuantity(Integer.parseInt(quantityEdit.getText().toString()));
                         String newDate = "";
-                        newDate = "" + editDate.getYear() + "-" + (editDate.getMonth()+1)
-                            + "-" + editDate.getDayOfMonth();
+                        newDate = "" + editDate.getYear() + "-" + (editDate.getMonth() + 1)
+                                + "-" + editDate.getDayOfMonth();
                         Log.d("ContextMenu", newDate + " Is the Date");
                         selectedGrocery.setDateWithString(newDate);
                         db.updateGroceryItem(selectedGrocery);
@@ -167,7 +166,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     *
      * @param menu
      * @return
      */
@@ -177,13 +175,12 @@ public class MainActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         //MenuItem toggler = menu.findItem(R.id.toggle_notify);
         //boolean backgroundServiceStarted = settings.getBoolean("notifyStatus", true);
-       // toggler.setChecked(backgroundServiceStarted);
+        // toggler.setChecked(backgroundServiceStarted);
 
         return true;
     }
 
     /**
-     *
      * @param item
      * @return
      */
@@ -230,7 +227,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-
     private void startSchedule() {
 
         try {
@@ -248,7 +244,7 @@ public class MainActivity extends ActionBarActivity {
             long alarmTime = settings.getLong("alarm_time_as_long", today.getTimeInMillis());
             Log.d("TIMECHAMBER", "SystemTime: " + System.currentTimeMillis());
             Log.d("TIMECHAMBER", "AlarmTime: " + today.getTimeInMillis());
-            Log.d("TIMECHAMBER", "Difference: " + (today.getTimeInMillis()-System.currentTimeMillis()));
+            Log.d("TIMECHAMBER", "Difference: " + (today.getTimeInMillis() - System.currentTimeMillis()));
             alarms.setRepeating(AlarmManager.RTC_WAKEUP,
                     alarmTime, AlarmManager.INTERVAL_DAY, pIntent);
         } catch (Exception e) {
@@ -275,16 +271,16 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     *  updates the list view to hold the set
+     * updates the list view to hold the set
      */
-    void displayToListView(){
+    void displayToListView() {
         // Get the reference of GroceryList
-        ListView groceryList = (ListView)findViewById(R.id.GroceryList);
+        ListView groceryList = (ListView) findViewById(R.id.GroceryList);
 
         // create an arrayList of groceries
         ArrayList<Grocery> tempArray = new ArrayList<>();
         tempArray.addAll(allStoredItems);
-        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, tempArray);
+        ArrayAdapter<Grocery> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tempArray);
 
         // Set Adapter
         groceryList.setAdapter(arrayAdapter);
@@ -294,7 +290,8 @@ public class MainActivity extends ActionBarActivity {
     Button addButton;
     private Button scanButton;
     Dialog custom;
-    public void addItem(View view){
+
+    public void addItem(View view) {
         //Intent intent = new Intent(this, AddItem.class);
         // startActivity(intent);
 
@@ -303,7 +300,7 @@ public class MainActivity extends ActionBarActivity {
         custom.setContentView(R.layout.activity_add_item);
         custom.setTitle("Add Item");
 
-        addButton = (Button)custom.findViewById(R.id.FinalAddbutton);
+        addButton = (Button) custom.findViewById(R.id.FinalAddbutton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -313,7 +310,7 @@ public class MainActivity extends ActionBarActivity {
                 int Day = -1;
                 int month = -1;
                 int year = -1;
-               // if(custom.findViewById(R.id.nameText).toString().length() > 0 &&
+                // if(custom.findViewById(R.id.nameText).toString().length() > 0 &&
                 //   custom.findViewById(R.id.QuantityText).toString().length() > 0 ){
 
                 EditText nameEdit = (EditText) custom.findViewById(R.id.nameText);
@@ -321,10 +318,9 @@ public class MainActivity extends ActionBarActivity {
                 EditText quantityEdit = (EditText) custom.findViewById(R.id.QuantityText);
                 name = nameEdit.getText().toString();
                 quantity = quantityEdit.getText().toString();
-                if(quantity.equals("") || name.equals("")){
+                if (quantity.equals("") || name.equals("")) {
                     Toast.makeText(getApplicationContext(), "Fill in all fields", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     int quantityAsInt = Integer.parseInt(quantity);
                     Day = expDate.getDayOfMonth();
                     month = expDate.getMonth();
@@ -360,26 +356,24 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     *
      * @param requestCode default value
-     * @param resultCode default value
-     * @param intent default value
+     * @param resultCode  default value
+     * @param intent      default value
      */
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-    //retrieve scan result
-        if(requestCode == 13){
+        //retrieve scan result
+        if (requestCode == 13) {
             settings = PreferenceManager.getDefaultSharedPreferences(this);
-            if(settings.getBoolean("notifyStatus",true)) {
+            if (settings.getBoolean("notifyStatus", true)) {
                 startSchedule();
-            }
-            else{
+            } else {
                 cancelSchedules();
             }
             return;
         }
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
                 intent);
-        if(scanningResult != null){
+        if (scanningResult != null) {
             try {
                 String scanContent = scanningResult.getContents();
 
@@ -389,7 +383,7 @@ public class MainActivity extends ActionBarActivity {
                 HTMLParser(scanContent);
                 String NoDataFound = "No Data Found";
 
-                if(!resultsForItem.equals(NoDataFound)) {
+                if (!resultsForItem.equals(NoDataFound)) {
 
                     EditText myTextBox = (EditText) custom.findViewById(R.id.nameText);
                     Log.i("inside scan button", resultsForItem);
@@ -401,14 +395,13 @@ public class MainActivity extends ActionBarActivity {
                     results.show();
                 }
 
-            } catch (Exception e){
-                Log.i("Scanner Exception", e.toString() );
+            } catch (Exception e) {
+                Log.i("Scanner Exception", e.toString());
                 Toast results = Toast.makeText(getApplicationContext(), " Scan Canceled ",
                         Toast.LENGTH_LONG);
                 results.show();
             }
-        }
-        else{
+        } else {
             Toast toast = Toast.makeText(getApplicationContext(),
                     "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
@@ -418,11 +411,12 @@ public class MainActivity extends ActionBarActivity {
     /**
      * The HTMLParser will parse an HTML doc to extract the description and size/weight of the item
      * that is being searched
+     *
      * @param scanResults results from the bar code scanner
      */
     public void HTMLParser(final String scanResults) {
 
-        Thread thread = new Thread(new Runnable(){
+        Thread thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
@@ -433,13 +427,13 @@ public class MainActivity extends ActionBarActivity {
                             .maxBodySize(0).timeout(600000).get();
                     Elements content = HTML.body().getElementsByClass("data");
 
-                    if(!content.isEmpty()){
-                        for (int i = 0; i < content.size(); i++){
+                    if (!content.isEmpty()) {
+                        for (int i = 0; i < content.size(); i++) {
                             Log.i("CONTENT " + i, content.get(i).text());
                         }
 
                         // if true then there is an item in website database
-                        if(content.get(0).text().contains("UPC-A EAN/UCC-13 Description")) {
+                        if (content.get(0).text().contains("UPC-A EAN/UCC-13 Description")) {
 
                             // various steps to split the string to get the item information
                             String[] parsedString = content.get(0).text().split("UPC-A EAN/UCC-13 Description");
@@ -458,14 +452,13 @@ public class MainActivity extends ActionBarActivity {
                             resultsForItem = itemInfo;
 
                             Log.i("results in HTMLParser", resultsForItem);
-                        }
-                        else {
+                        } else {
                             resultsForItem = "No Data Found";
                         }
                     }
 
                 } catch (Exception e) {
-                   Log.i("HTML Exception", e.toString() );
+                    Log.i("HTML Exception", e.toString());
                 }
             }
         });
@@ -480,27 +473,27 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    protected void addGroceryItemToSet(Grocery tempGrocery){
+    protected void addGroceryItemToSet(Grocery tempGrocery) {
 
 
         /*check if contains
             if true find it and increase quantity then update DB
             false add to DB then add to set from DB
          */
-        if(allStoredItems.contains(tempGrocery)){
+        if (allStoredItems.contains(tempGrocery)) {
             Grocery toUpdate = findInSet(tempGrocery);
             toUpdate.addQuantity(tempGrocery.getQuantity());
             db.updateGroceryItem(toUpdate);
-        }
-        else{
+        } else {
             long newID = db.addGroceryToDatabase(tempGrocery);
 
             allStoredItems.add(db.getGroceryByID(((int) newID)));
         }
     }
-    private Grocery findInSet(Grocery find){
-        for(Grocery check: allStoredItems){
-            if(check.equals(find))
+
+    private Grocery findInSet(Grocery find) {
+        for (Grocery check : allStoredItems) {
+            if (check.equals(find))
                 return check;
         }
         return find;
@@ -510,10 +503,9 @@ public class MainActivity extends ActionBarActivity {
     /**
      * This will read in from the database on opening and store into our allStoredItems
      */
-    private void populateSetOnCreate(){
+    private void populateSetOnCreate() {
         allStoredItems.addAll(db.getAllGroceries());
     }
-
 
 
     public static class PrefsFragment extends PreferenceFragment {

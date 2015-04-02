@@ -4,7 +4,7 @@
     <item
         android:id="@+id/id_delete"
         android:title="@string/title_delete"
-        
+
         ></item>
     <item
         android:id="@+id/id_edit"

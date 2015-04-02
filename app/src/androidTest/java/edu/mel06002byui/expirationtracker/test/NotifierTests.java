@@ -7,7 +7,7 @@ import edu.mel06002byui.expirationtracker.MainActivity;
 
 public class NotifierTests extends TestCase {
 
-    boolean updateTest(){
+    boolean updateTest() {
 
         MainActivity testMain = new MainActivity();
         BackgroundNotifier testNotifier = new BackgroundNotifier(testMain);
