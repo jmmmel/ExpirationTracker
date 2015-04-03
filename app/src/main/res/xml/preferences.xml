@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreference
-        android:key="notifyStatus"
-        android:title="Notifications" />
-    <edu.mel06002byui.expirationtracker.TimePreference
-        android:key="alarm_time_as_long"
-        android:title="Set Notification Time" />
-    <MultiSelectListPreference
-        android:key="notify_days"
-        android:title="Days to Notify"
-        android:entries="@array/days_in_week"
-        android:entryValues="@array/day_keys" />
-    <SwitchPreference
-        android:key="clearDatabase"
-        android:title="Clear All"/>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="firstScreen">
 
+    <PreferenceCategory
+        android:title="Notifications">
+        <SwitchPreference
+            android:key="notifyStatus"
+            android:title="Enable" />
+        <edu.mel06002byui.expirationtracker.TimePreference
+            android:key="alarm_time_as_long"
+            android:title="Set Notification Time" />
+        <MultiSelectListPreference
+            android:key="notify_days"
+            android:title="Days to Notify"
+            android:entries="@array/days_in_week"
+            android:entryValues="@array/day_keys" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Clear Database"
+        android:key="wipeDatabase">
+
+        <Preference
+            android:key="clearDatabase"
+            android:title="Clear Database"
+            android:summary="WARNING! this is irreversible"/>
+    </PreferenceCategory>
 </PreferenceScreen>

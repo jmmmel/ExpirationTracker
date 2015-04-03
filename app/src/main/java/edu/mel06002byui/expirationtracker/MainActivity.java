@@ -57,7 +57,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.i("Pree", settings.toString());
         prefEditor = settings.edit();
+        Log.i("Pree prefEditor", prefEditor.toString());
         setContentView(R.layout.activity_main);
         lv = (ListView) findViewById(R.id.GroceryList);
         registerForContextMenu(lv);
@@ -76,6 +78,7 @@ public class MainActivity extends ActionBarActivity {
             Set<String> temp = new TreeSet<>();
             temp.add("saturday_valid");
             prefEditor.putStringSet("notify_days", temp);
+            Log.i("Preeditor", prefEditor.toString());
             prefEditor.putBoolean("clearDatabase", false);
             prefEditor.commit();
 
@@ -326,22 +329,16 @@ public class MainActivity extends ActionBarActivity {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         //retrieve scan result
-        if (requestCode == 13) {
-            settings = PreferenceManager.getDefaultSharedPreferences(this);
-            if (settings.getBoolean("notifyStatus", true)) {
-                startSchedule();
-            } else {
-                cancelSchedules();
-            }
-            if(settings.getBoolean("clearDatabase",false)){
-                db.clearDatabase();
+        if (requestCode == 13){
+            if (settings.getBoolean("clearDatabase", false)) {
                 allStoredItems.clear();
                 displayToListView();
-                prefEditor.putBoolean("clearDatabase",false);
-                prefEditor.apply();
+                prefEditor.putBoolean("clearDatabase", false);
+                prefEditor.commit();
             }
             return;
         }
+
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
                 intent);
         if (scanningResult != null) {
@@ -479,16 +476,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    public static class PrefsFragment extends PreferenceFragment {
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            // Load the preferences from an XML resource
-            addPreferencesFromResource(R.xml.preferences);
-        }
-    }
 
 }
 
