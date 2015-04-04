@@ -32,6 +32,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -206,13 +207,20 @@ public class MainActivity extends ActionBarActivity {
 
             final PendingIntent pIntent = PendingIntent.getBroadcast(this,
                     1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            Calendar today = Calendar.getInstance();
-            long alarmTime = settings.getLong("alarm_time_as_long", today.getTimeInMillis());
+            Calendar alarmTime = new GregorianCalendar();
+            alarmTime.setTimeInMillis(settings
+                    .getLong("alarm_time_as_long", System.currentTimeMillis()));
             Log.d("TIMECHAMBER", "SystemTime: " + System.currentTimeMillis());
-            Log.d("TIMECHAMBER", "AlarmTime: " + today.getTimeInMillis());
-            Log.d("TIMECHAMBER", "Difference: " + (today.getTimeInMillis() - System.currentTimeMillis()));
+            Log.d("TIMECHAMBER", "AlarmTime: " + alarmTime.getTimeInMillis());
+            Log.d("TIMECHAMBER", "Difference: " +
+                    (alarmTime.getTimeInMillis() - System.currentTimeMillis()));
+            if((alarmTime.getTimeInMillis() - System.currentTimeMillis()) <= 0){
+                alarmTime.add(Calendar.DATE, 1);
+                alarmTime.set(Calendar.MILLISECOND, 0);
+                alarmTime.set(Calendar.SECOND,0);
+            }
             alarms.setRepeating(AlarmManager.RTC_WAKEUP,
-                    alarmTime, AlarmManager.INTERVAL_DAY, pIntent);
+                    alarmTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntent);
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -336,6 +344,12 @@ public class MainActivity extends ActionBarActivity {
                 prefEditor.putBoolean("clearDatabase", false);
                 prefEditor.commit();
             }
+            if(settings.getBoolean("notifyStatus",true)){
+                startSchedule();
+            }else{
+                cancelSchedules();
+            }
+
             return;
         }
 
