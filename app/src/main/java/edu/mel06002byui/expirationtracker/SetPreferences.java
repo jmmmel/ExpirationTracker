@@ -6,6 +6,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 public class SetPreferences extends PreferenceActivity {
 
@@ -46,6 +47,9 @@ public class SetPreferences extends PreferenceActivity {
                 editPref.putBoolean("clearDatabase", true);
                 editPref.commit();
 
+                Toast dataBaseStatus = Toast.makeText(this.getActivity(), "Database Cleared",
+                        Toast.LENGTH_LONG);
+                dataBaseStatus.show();
             }
             return true;
         }
