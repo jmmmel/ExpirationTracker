@@ -7,9 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -296,7 +294,7 @@ public class MainActivity extends ActionBarActivity {
                     month = expDate.getMonth();
                     year = expDate.getYear();
                     Grocery grocery = new Grocery(name, quantityAsInt, month, Day, year);
-                    Log.d("DAYS ADDING ISSUES","In add");
+                    Log.d("DAYS ADDING ISSUES", "In add");
                     addGroceryItemToSet(grocery);
 
                     displayToListView();
@@ -332,26 +330,26 @@ public class MainActivity extends ActionBarActivity {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         //retrieve scan result
-        if (requestCode == 13){
+        if (requestCode == 13) {
             if (settings.getBoolean("clearDatabase", false)) {
                 allStoredItems.clear();
                 displayToListView();
                 prefEditor.putBoolean("clearDatabase", false);
             }
-            boolean needsUpdate = settings.getBoolean("notify_update",false);
-            boolean alreadyOn = settings.getBoolean("already_on",false);
-            boolean status = settings.getBoolean("notifyStatus",false);
+            boolean needsUpdate = settings.getBoolean("notify_update", false);
+            boolean alreadyOn = settings.getBoolean("already_on", false);
+            boolean status = settings.getBoolean("notifyStatus", false);
             Log.d("TIMECHAMBER", "Needs Update: " + needsUpdate);
             Log.d("TIMECHAMBER", "Already On: " + alreadyOn);
             Log.d("TIMECHAMBER", "Status: " + status);
-            if((status && !alreadyOn) || needsUpdate){
-                prefEditor.putBoolean("already_on",true);
+            if ((status && !alreadyOn) || needsUpdate) {
+                prefEditor.putBoolean("already_on", true);
                 prefEditor.putBoolean("notify_update", false);
                 startSchedule();
                 Log.d("SCHEDULER", "In Start");
-            }else if(!status){
+            } else if (!status) {
 
-                prefEditor.putBoolean("already_on",false);
+                prefEditor.putBoolean("already_on", false);
                 cancelSchedules();
             }
             prefEditor.apply();
@@ -493,8 +491,6 @@ public class MainActivity extends ActionBarActivity {
     private void populateSetOnCreate() {
         allStoredItems.addAll(db.getAllGroceries());
     }
-
-
 
 
 }

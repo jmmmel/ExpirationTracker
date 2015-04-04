@@ -1,18 +1,16 @@
 package edu.mel06002byui.expirationtracker;
 
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class SetPreferences extends PreferenceActivity {
 
     private GrocerySQLiteHelper db = new GrocerySQLiteHelper(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -41,7 +39,7 @@ public class SetPreferences extends PreferenceActivity {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            if(preference.getKey().equals("clearDatabase")) {
+            if (preference.getKey().equals("clearDatabase")) {
                 new GrocerySQLiteHelper(this.getActivity()).clearDatabase();
                 SharedPreferences.Editor editPref = PreferenceManager
                         .getDefaultSharedPreferences(this.getActivity()).edit();
