@@ -1,8 +1,10 @@
 package edu.mel06002byui.expirationtracker;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
+import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -57,7 +59,13 @@ public class TimePreference extends DialogPreference {
         if (positiveResult) {
             calendar.set(Calendar.HOUR_OF_DAY, picker.getCurrentHour());
             calendar.set(Calendar.MINUTE, picker.getCurrentMinute());
-
+            calendar.set(Calendar.MILLISECOND,0);
+            calendar.set(Calendar.SECOND,0);
+            SharedPreferences settings = PreferenceManager
+                    .getDefaultSharedPreferences(this.getContext());
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("notify_update",true);
+            editor.commit();
             setSummary(getSummary());
             if (callChangeListener(calendar.getTimeInMillis())) {
                 persistLong(calendar.getTimeInMillis());

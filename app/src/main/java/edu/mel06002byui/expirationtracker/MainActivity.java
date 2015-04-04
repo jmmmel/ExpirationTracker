@@ -32,7 +32,6 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -81,6 +80,7 @@ public class MainActivity extends ActionBarActivity {
             prefEditor.putStringSet("notify_days", temp);
             Log.i("Preeditor", prefEditor.toString());
             prefEditor.putBoolean("clearDatabase", false);
+            prefEditor.putBoolean("already_on", true);
             prefEditor.commit();
 
             startSchedule();
@@ -207,20 +207,15 @@ public class MainActivity extends ActionBarActivity {
 
             final PendingIntent pIntent = PendingIntent.getBroadcast(this,
                     1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            Calendar alarmTime = new GregorianCalendar();
-            alarmTime.setTimeInMillis(settings
-                    .getLong("alarm_time_as_long", System.currentTimeMillis()));
+            long alarmTime = settings
+                    .getLong("alarm_time_as_long", System.currentTimeMillis());
             Log.d("TIMECHAMBER", "SystemTime: " + System.currentTimeMillis());
-            Log.d("TIMECHAMBER", "AlarmTime: " + alarmTime.getTimeInMillis());
-            Log.d("TIMECHAMBER", "Difference: " +
-                    (alarmTime.getTimeInMillis() - System.currentTimeMillis()));
-            if((alarmTime.getTimeInMillis() - System.currentTimeMillis()) <= 0){
-                alarmTime.add(Calendar.DATE, 1);
-                alarmTime.set(Calendar.MILLISECOND, 0);
-                alarmTime.set(Calendar.SECOND,0);
-            }
+            Log.d("TIMECHAMBER", "AlarmTime: " + alarmTime);
+            Log.d("TIMECHAMBER", "Difference: "
+                    + (alarmTime - System.currentTimeMillis()));
+
             alarms.setRepeating(AlarmManager.RTC_WAKEUP,
-                    alarmTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntent);
+                    alarmTime, AlarmManager.INTERVAL_DAY, pIntent);
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -342,14 +337,24 @@ public class MainActivity extends ActionBarActivity {
                 allStoredItems.clear();
                 displayToListView();
                 prefEditor.putBoolean("clearDatabase", false);
-                prefEditor.commit();
             }
-            if(settings.getBoolean("notifyStatus",true)){
+            boolean needsUpdate = settings.getBoolean("notify_update",false);
+            boolean alreadyOn = settings.getBoolean("already_on",false);
+            boolean status = settings.getBoolean("notifyStatus",false);
+            Log.d("TIMECHAMBER", "Needs Update: " + needsUpdate);
+            Log.d("TIMECHAMBER", "Already On: " + alreadyOn);
+            Log.d("TIMECHAMBER", "Status: " + status);
+            if((status && !alreadyOn) || needsUpdate){
+                prefEditor.putBoolean("already_on",true);
+                prefEditor.putBoolean("notify_update", false);
                 startSchedule();
-            }else{
+                Log.d("SCHEDULER", "In Start");
+            }else if(!status){
+
+                prefEditor.putBoolean("already_on",false);
                 cancelSchedules();
             }
-
+            prefEditor.apply();
             return;
         }
 
