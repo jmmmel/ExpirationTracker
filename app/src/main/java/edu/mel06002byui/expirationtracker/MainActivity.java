@@ -479,16 +479,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    public static class PrefsFragment extends PreferenceFragment {
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            // Load the preferences from an XML resource
-            addPreferencesFromResource(R.xml.preferences);
-        }
-    }
 
 }
 
