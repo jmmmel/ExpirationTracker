@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
     private static final String KEY_QUANTITY = "quantity";
     private static final String KEY_EXPIRATION_DATE = "expirationDate";
     private static final String[] COLUMNS = {KEY_ID, KEY_NAME, KEY_QUANTITY};
-
+    private externalStorage externalStorageState;
     /**
      * default constructor
      *
@@ -313,4 +314,21 @@ public class GrocerySQLiteHelper extends SQLiteOpenHelper {
         // create groceries table
         db.execSQL(Create_Grocery_Table);
     }
+
+    /**
+     * Saves a back up of the DB to the external storage
+     */
+    public void backupDB(){
+
+        // see if the external storage is available
+        if (externalStorageState.getOkToWrite()){
+
+        }
+        //use to ensure files arent deleted upon uninstall
+        //getExternalStoragePublicDirectory()
+
+
+    }
+
+
 }

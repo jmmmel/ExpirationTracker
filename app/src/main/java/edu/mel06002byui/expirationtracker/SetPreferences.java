@@ -40,6 +40,8 @@ public class SetPreferences extends PreferenceActivity {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
+
+            //clear database on tap
             if (preference.getKey().equals("clearDatabase")) {
                 new GrocerySQLiteHelper(this.getActivity()).clearDatabase();
                 SharedPreferences.Editor editPref = PreferenceManager
@@ -51,7 +53,13 @@ public class SetPreferences extends PreferenceActivity {
                         Toast.LENGTH_LONG);
                 dataBaseStatus.show();
             }
+            else if (preference.getKey().equals("backupDB")){
+                new GrocerySQLiteHelper(this.getActivity()).backupDB();
+
+            }
             return true;
         }
+
+
     }
 }

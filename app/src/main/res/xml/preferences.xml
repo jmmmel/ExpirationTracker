@@ -26,4 +26,13 @@
             android:title="Clear Database"
             android:summary="WARNING! this is irreversible"/>
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Backup Database"
+        android:key="backup">
+
+        <Preference
+            android:key="backupDB"
+            android:title="Backup Database to External Storage"/>
+    </PreferenceCategory>
 </PreferenceScreen>
